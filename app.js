@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('./config/config');
 const User = require('./models/user');
+const SR = require('./routes/surveyRoute');
 
 // DATABASE CONNECTION
 
@@ -45,3 +46,24 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log('Server startet on port ' + port);
 });
+
+let mySurvey =   {
+    "Title":"John's Survey",
+    "Desc" : "A Survey about john",
+    "Author":"John Wick",
+    "Questions": [
+      { "Question":"how old is john",
+      "Answers":[ "20yo", "25yo", "30yo" ]},
+      { "Question":"which gun does john use",
+      "Answers":[ "magnum", "9mm", "desert eagle" ]},
+      { "Question":"which car does john drive",
+      "Answers":[ "Fiat Punto", "mazda 3", "Volvo" ]}
+    ]
+ }
+// retrive from json example
+/*
+console.log(mySurvey.Questions[0].Question)
+let answers = ((mySurvey.Questions[0].Answers))
+answers.forEach( e => console.log(e));
+*/
+SR.sendSomething(mySurvey);
