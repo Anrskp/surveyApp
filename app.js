@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('./config/config');
+const User = require('./models/user');
 
 // DATABASE CONNECTION
 
