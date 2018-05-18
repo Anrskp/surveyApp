@@ -14,7 +14,9 @@
     "express": "*",
     "mongoose": "*",
     "nodemon": "^1.17.3",
-    "wascally": "^0.3.0"
+    "wascally": "^0.3.0",
+    "passport": "*",
+    "passport-jwt": "*"
   },
   "author": "Anders",
   "license": "ISC"

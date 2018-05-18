@@ -5,8 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const config = require('./config/config');
-const User = require('./models/user');
-const SR = require('./routes/surveyRoute');
+const user = require('./routes/userRoutes');
+const survey = require('./routes/surveyRoute');
+const passport = require('passport');
 
 // DATABASE CONNECTION
 
@@ -37,7 +38,14 @@ app.use(cors());
 //Body Parser Middleware
 app.use(bodyParser.json());
 
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport);
+
 // Routes
+app.use('/users', user);
+//app.use('/survey', survey);
 
 // Set port number
 const port = process.env.PORT || 3000;
@@ -60,10 +68,14 @@ let mySurvey =   {
       "Answers":[ "Fiat Punto", "mazda 3", "Volvo" ]}
     ]
  }
+
 // retrive from json example
+
 /*
 console.log(mySurvey.Questions[0].Question)
 let answers = ((mySurvey.Questions[0].Answers))
 answers.forEach( e => console.log(e));
 */
-SR.sendSomething(mySurvey);
+
+// send a survey json object
+survey.sendSomething(mySurvey);
