@@ -1,0 +1,93 @@
+<div class="container">
+
+<div [hidden]="submitted">
+  {{diagnostic}}
+    <form (ngSubmit)="onSubmit()" #questionForm="ngForm">
+      <div class="form-group">
+        <label for="surveyTopic">Survey topic</label>
+        <input type="text" class="form-control" id="surveyTopic" required [(ngModel)] = "surveyTopic" name="surveyTopic" placeholder="Please enter your survey topic">
+      </div>
+
+      <div class="form-group">
+        <label for="title">Question</label>
+        <input type="text" class="form-control" id="title" required [(ngModel)] = "title" name="title" placeholder="Please enter your question">
+      </div>
+
+      <div class="form-group">
+        <label for="choice1">First choice</label>
+        <input type="text" class="form-control" id="choice" [(ngModel)] = "choice1" name="choice1" placeholder="Please enter your choice">
+      </div>
+
+      <div class="form-group">
+        <label for="choice2">Second choice</label>
+        <input type="text" class="form-control" id="choice2" [(ngModel)] = "choice2" name="choice2" placeholder="Please enter your choice">
+      </div>
+
+      <div class="form-group">
+        <label for="choice3">Third choice</label>
+        <input type="text" class="form-control" id="choice3" [(ngModel)] = "choice3" name="choice3" placeholder="Please enter your choice">
+      </div>
+
+      <div class="form-group">
+        <label for="choice4">Fourth choice</label>
+        <input type="text" class="form-control" id="choice4" [(ngModel)] = "choice4" name="choice4" placeholder="Please enter your choice">
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="submitted">Submit</button>
+      <button type="button" class="btn btn-success" (click)="newQuestion(); questionForm.reset()" id="addNewButton" >Create</button>
+
+    </form>
+</div>
+</div>
+
+<!-- <div [hidden]="!submitted">
+
+
+
+  <div *ngFor="let question of questions">
+  <h2>{{question.surveyTopic}}</h2>
+  <div class="row">
+    <div class="col-xs-3">Question:</div>
+    <div class="col-xs-9  pull-left">{{question.title}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">First choice:</div>
+    <div class="col-xs-9 pull-left">{{question.choice1}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Second choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice2}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Third choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice3}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Fourth choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice4}}</div>
+  </div>
+  <br>
+  </div>
+  <button class="btn btn-primary" (click)="submitted=false">Send</button>
+</div> -->
+
+<!-- Radio buttons -->
+<div [hidden]="!submitted">
+  <h2> This is what you submitted!</h2>
+<div *ngFor="let question of questions; index as j">
+  <h3>{{question.title}}</h3>
+  <div class="radio">
+    <label><input type="radio" name="question{{j}}" >{{question.choice1}}</label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="question{{j}}" >{{question.choice2}}</label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="question{{j}}" >{{question.choice3}}</label>
+    <div class="radio">
+      <label><input type="radio" name="question{{j}}" >{{question.choice4}}</label>
+    </div>
+  </div>
+</div>
+  <button class="btn btn-primary" (click)="submitted=false">Send</button>
+</div>
