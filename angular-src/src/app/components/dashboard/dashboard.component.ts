@@ -1,53 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import{Question} from '../../question'
+import {SurveyService} from '../../services/survey.service';
+import{Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
+
 export class DashboardComponent implements OnInit {
+
+  Title: string;
+  Desc: string;
+  Question:string;
+  Answer1:string;
+  Answer2:string;
+  Answer3:string;
+  Surveys = [];
+
+  hideDescription = false;
+  hideQuestions = true;
+
+
+   survey = {
+    "Title":"",
+    "Desc":"",
+    "Auth":"",
+    "Questions":[]
+    }
+
   constructor(
+    private surveyService: SurveyService,
+    private router: Router
 
   ) { }
-    id: number;
-    surveyTopic:string;
-    title: string;
-    choice1: string;
-    choice2:string;
-    choice3:string;
-    choice4:string;
 
-    questions = [];
-
-    submitted = false;
-
-    onSubmit() { this.submitted = true; }
-
-    get diagnostic()
-     {
-        return JSON.stringify(this.questions);
-     }
+  ngOnInit() {
+  }
 
 
-     newQuestion() {
-       var id = 0;
-       let newQuestion = new Question(
-         this.id = id,
-         this.surveyTopic,
-         this.title,
-         this.choice1,
-         this.choice2,
-         this.choice3,
-         this.choice4
-       );
-       this.questions.push(newQuestion);
-
-     }
+    onSubmit()
+    {
+        //this.hideQuestions = true;
+        let user = JSON.parse(localStorage.getItem('user'));
+        this.survey.Auth = user.id;
+        this.Surveys.push(this.survey);
+        console.log(this.Surveys);
+        this.router.navigate(['/doSurvey']);
 
 
-
-    ngOnInit() {
     }
+
+     newQuestion()
+     {
+
+         let question = {
+         "Question":this.Question,
+         "Answers":[ this.Answer1, this.Answer2, this.Answer3]};
+         //this.Questions.push(question);
+         this.survey.Questions.push(question);
+       }
+
+    addDescription()
+    {
+        this.hideDescription = true;
+        this.hideQuestions = false;
+        this.survey.Title = this.Title;
+        this.survey.Desc = this.Desc;
+
+    }
+
+
+
 
   }

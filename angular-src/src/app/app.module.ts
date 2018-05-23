@@ -12,13 +12,16 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 import{FlashMessagesModule} from 'angular2-flash-messages';
 import {AuthServiceService} from './services/auth-service.service';
+import {SurveyService} from './services/survey.service';
+import { DoSurveyComponent } from './components/do-survey/do-survey.component';
 
 
 const appRoutes: Routes = [
     {path: '', component: HomeComponent},
     {path:'login', component: LoginComponent},
     {path:'register', component: RegisterComponent},
-    {path:'dashboard', component: DashboardComponent}
+    {path:'dashboard', component: DashboardComponent},
+    {path:'doSurvey', component:DoSurveyComponent}
 ]
 
 @NgModule({
@@ -27,7 +30,8 @@ const appRoutes: Routes = [
       HomeComponent,
       LoginComponent,
       RegisterComponent,
-      DashboardComponent
+      DashboardComponent,
+      DoSurveyComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,7 @@ const appRoutes: Routes = [
     HttpModule,
     FlashMessagesModule.forRoot()
   ],
-  providers: [AuthServiceService],
+  providers: [AuthServiceService,SurveyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
