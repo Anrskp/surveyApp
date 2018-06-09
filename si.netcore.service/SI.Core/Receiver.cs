@@ -279,7 +279,7 @@ namespace SystemIntegration_2018
         private async Task<string> GetSurveysForID(string userId)
         {
             SurveyDAL survey = new SurveyDAL();
-            var surveys = survey.GetSurveys(userId);
+            var surveys = survey.GetAllSurveysPopulated(userId);
             foreach (var item in surveys)
             {
                 Console.WriteLine(item.Name);

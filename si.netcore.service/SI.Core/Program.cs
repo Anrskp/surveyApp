@@ -13,7 +13,7 @@ namespace SI.Core
         {
             //Send.StartReceiving();
             //SurveyDAL survey = new SurveyDAL();
-            //var surveys = survey.GetSurveys("John Wick");
+            //var surveys = survey.GetAllSurveys("John Wick");
             //foreach (var item in surveys)
             //{
             //    Console.WriteLine(item.Name);
@@ -54,8 +54,8 @@ namespace SI.Core
             //program.ListenForRPC();
             //ListenForMessages();
             //Send.SendMessage();
-            Receiver receive = new Receiver();
-            receive.StartRPCListener();
+            //Receiver receive = new Receiver();
+            //receive.StartRPCListener();
 
             //---------------------------------
             //QuestionMultiple question1 = new QuestionMultiple("Test question", new List<string>() { "a", "b", "c"});
@@ -66,6 +66,30 @@ namespace SI.Core
             //var json = JsonConvert.SerializeObject(survey);
             //Console.WriteLine(json);
             //Console.ReadLine();
+
+            //---------------------------------
+            //SurveyDAL survey = new SurveyDAL();
+            //var surveys = survey.GetAllSurveys("John Wick");
+            //foreach (var item in surveys)
+            //{
+            //    Console.WriteLine(item.Name);
+            //    Console.WriteLine(item.Description);
+            //    Console.WriteLine(item.Owner);
+            //    Console.WriteLine(item.ID);
+            //    Console.WriteLine();
+            //}
+            //Console.ReadLine();
+
+            SurveyDAL surveyDAL = new SurveyDAL();
+            var survey = surveyDAL.GetSurveyData("C454FFE4-8");
+            Console.WriteLine(survey.Name);
+            Console.WriteLine(survey.Description);
+            foreach (var q in survey.QuestionsMultipleChoice)
+            {
+                Console.WriteLine(q.QuestionField);
+            }
+            Console.WriteLine();
+            Console.ReadLine();
         }
 
         private async Task ListenForRPC()
