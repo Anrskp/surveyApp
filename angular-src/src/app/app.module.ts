@@ -14,14 +14,15 @@ import{FlashMessagesModule} from 'angular2-flash-messages';
 import {AuthServiceService} from './services/auth-service.service';
 import {SurveyService} from './services/survey.service';
 import { DoSurveyComponent } from './components/do-survey/do-survey.component';
+import{AuthGuard} from  './guards/auth.guard';
 
 
 const appRoutes: Routes = [
     {path: '', component: HomeComponent},
     {path:'login', component: LoginComponent},
     {path:'register', component: RegisterComponent},
-    {path:'dashboard', component: DashboardComponent},
-    {path:'doSurvey', component:DoSurveyComponent}
+    {path:'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate:[AuthGuard]},
+    {path:'doSurvey/:id', component:DoSurveyComponent}
 ]
 
 @NgModule({
@@ -40,7 +41,7 @@ const appRoutes: Routes = [
     HttpModule,
     FlashMessagesModule.forRoot()
   ],
-  providers: [AuthServiceService,SurveyService],
+  providers: [AuthServiceService,SurveyService,AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
         this.survey.Auth = user.id;
         this.Surveys.push(this.survey);
         console.log(this.Surveys);
-        this.router.navigate(['/doSurvey']);
+        //this.router.navigate(['/doSurvey']);
 
 
     }
