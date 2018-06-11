@@ -39,6 +39,11 @@ namespace SystemIntegration_2018.Models
             this.Description = description;
         }
 
+        public Survey()
+        {
+
+        }
+
         [JsonIgnore]
         public string Name { get => name; set => name = value; }
         [JsonIgnore]
