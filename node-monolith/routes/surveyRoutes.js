@@ -24,18 +24,32 @@ let mySurvey = {
 }
 
 // Create survey
-router.get('/sendSurvey', (req, res, next) => {
-  surveyCRUD.sendSurvey(mySurvey).then(x => {
-    console.log(x);
-  })
+router.post('/createNewSurvey', (req, res, next) => {
+  try {
+    surveyCRUD.sendSurvey(req.body).then(x => {
+      res.json({
+        data: x
+      });
+    })
+  } catch (e) {
+    res.json({error: 'there was an error! try again later'})
+  }
 });
 
 // Get surveys overview
+
+
 // Get survey data
+
+
 // Delete survey
 
+
 // Get a specific survey
+
+
 // Send in answers for specific survey
+
 
 // send email notification with survey link
 

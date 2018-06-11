@@ -1,10 +1,11 @@
 const amqp = require('amqplib/callback_api');
+const config = require('../config/config')
 // import config with amqp conn
 
 // Create a new survey
-module.exports.sendSurvey = function(survey) {
+module.exports.createNewSurvey = function(survey) {
   return new Promise((resolve, reject) => {
-    amqp.connect('amqp://okigdyac:qAAeul-Jo8naKIbhwMxFxtjwnCn8MLbP@sheep.rmq.cloudamqp.com/okigdyac', function(err, conn) {
+    amqp.connect(config.rabbitConnUrl, function(err, conn) {
       conn.createChannel(function(err, ch) {
         ch.assertQueue('', {
           exclusive: true
@@ -39,7 +40,7 @@ module.exports.sendSurvey = function(survey) {
 // Get survey(s)
 module.exports.getSurvey = function(name) {
   return new Promise((resolve, reject) => {
-    amqp.connect('amqp://okigdyac:qAAeul-Jo8naKIbhwMxFxtjwnCn8MLbP@sheep.rmq.cloudamqp.com/okigdyac', function(err, conn) {
+    amqp.connect(config.rabbitConnUrl, function(err, conn) {
       conn.createChannel(function(err, ch) {
         ch.assertQueue('', {
           exclusive: true
@@ -72,22 +73,22 @@ module.exports.getSurvey = function(name) {
 
 // Get specific survey data
 module.exports.getSurveyData = () => {
-
+  // todo
 }
 
 // Delete specific survey
 module.exports.deleteSurvey = () => {
-
+  // todo
 }
 
 // Get a specific survey
 module.exports.getSurveyByID = () => {
-
+  // todo
 }
 
 // Send in answers to a specific survey
 module.exports.sendAnswers = () => {
-
+  // todo
 }
 
 

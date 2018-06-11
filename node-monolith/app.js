@@ -59,4 +59,4 @@ app.listen(port, () => {
 // Testing RabbitMQ
 const surveyCRUD = require('./rabbitMQ/surveyCRUD');
 
-surveyCRUD.getSurvey('John Wick').then(x => console.log(x));
+//surveyCRUD.getSurvey('John Wick').then(x => console.log(x));
