@@ -11,7 +11,7 @@ export class SurveyService {
   sendSurvey(survey){
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:5000/surveys/send', survey,{headers: headers})
+    return this.http.post('http://localhost:5000/survey/sendSurvey', survey,{headers: headers})
     .map(res => res.json());
   }
 

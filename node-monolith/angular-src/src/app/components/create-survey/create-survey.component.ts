@@ -35,9 +35,6 @@ export class CreateSurveyComponent implements OnInit {
   ngOnInit() {}
 
   newSurvey(){
-  //this.hideQuestions = true;
-    let user = JSON.parse(localStorage.getItem('user'));
-    this.survey.Auth = user.id;
     this.Surveys.push(this.survey);
     console.log(this.Surveys);
     this.hideDescription = false;
@@ -46,7 +43,15 @@ export class CreateSurveyComponent implements OnInit {
   }
   onSubmit()
   {
-    alert("Send survey pressed");
+    this.surveyService.sendSurvey(this.survey).subscribe(data =>{
+          if(data.success)
+          {
+            alert("Survey is successfully sent")''
+          }
+          else{
+            alert("Sending survey failed");
+          }
+      });
 
   }
 
@@ -62,10 +67,12 @@ export class CreateSurveyComponent implements OnInit {
 
  addDescription()
  {
-     this.hideDescription = true;
-     this.hideQuestions = false;
-     this.survey.Title = this.Title;
-     this.survey.Desc = this.Desc;
+   let user = JSON.parse(localStorage.getItem('user'));
+   this.survey.Auth = user.id;
+   this.survey.Title = this.Title;
+   this.survey.Desc = this.Desc;
+    this.hideDescription = true;
+    this.hideQuestions = false;
 
  }
 
