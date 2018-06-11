@@ -60,7 +60,7 @@ module.exports.getSurvey = function(name) {
             noAck: true
           });
 
-          ch.sendToQueue('rpc_surveys',
+          ch.sendToQueue('rpc_return_surveys_unpop',
             new Buffer(name), {
               correlationId: corr,
               replyTo: q.queue

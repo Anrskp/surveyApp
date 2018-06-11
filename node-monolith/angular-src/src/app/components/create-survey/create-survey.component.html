@@ -41,8 +41,8 @@
         <input type="text" class="form-control" id="Answer3" [(ngModel)] = "Answer3" name="Answer3" placeholder="Please enter your answer">
       </div>
       <button type="button" class="btn btn-success" (click)="newQuestion(); questionForm.reset()" id="addNewButton" >Add new question</button>
-      <button type="submit" class="btn btn-success" [disabled]="submitted">Send survey(s)</button>
-      <button type="button" class="btn btn-success" (click)="newSurvey();">Create new survey</button>
+      <button type="button" class="btn btn-success"  (click)="sendSurvey();">Send survey(s)</button>
+      <button type="button" class="btn btn-success" (click)="newSurvey();questionForm.reset(); surveyDescriptionForm.reset()">Create new survey</button>
 
     </form>
 </div>

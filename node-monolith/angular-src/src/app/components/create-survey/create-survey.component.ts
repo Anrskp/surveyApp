@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SurveyService} from '../../services/survey.service';
 import{Router} from '@angular/router';
+import{FlashMessagesService} from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-create-survey',
@@ -23,14 +24,15 @@ export class CreateSurveyComponent implements OnInit {
    survey = {
     "Title":"",
     "Desc":"",
-    "Auth":"",
+    "Author":"",
     "Questions":[]
     }
 
 
   constructor(
       private surveyService: SurveyService,
-      private router: Router) { }
+      private router: Router,
+      private flashMessage:FlashMessagesService) { }
 
   ngOnInit() {}
 
@@ -41,15 +43,23 @@ export class CreateSurveyComponent implements OnInit {
     this.hideQuestions = true;
     //this.router.navigate(['/doSurvey']);
   }
-  onSubmit()
+  sendSurvey()
   {
-    this.surveyService.sendSurvey(this.survey).subscribe(data =>{
+    let survey = JSON.stringify(this.survey);
+    this.surveyService.sendSurvey(survey).subscribe(data =>{
           if(data.success)
           {
-            alert("Survey is successfully sent")''
+              this.flashMessage.show('Survey is successfully saved into the databasse',{
+              cssClass: 'alert-success',
+              timeout: 5000});
+            //console.log(data);
           }
-          else{
-            alert("Sending survey failed");
+          else
+          {
+            this.flashMessage.show("Sending survey failed",{
+            cssClass: 'alert-danger',
+            timeout: 5000});
+          //console.log(data);
           }
       });
 
@@ -61,14 +71,13 @@ export class CreateSurveyComponent implements OnInit {
       let question = {
       "Question":this.Question,
       "Answers":[ this.Answer1, this.Answer2, this.Answer3]};
-      //this.Questions.push(question);
       this.survey.Questions.push(question);
     }
 
  addDescription()
  {
    let user = JSON.parse(localStorage.getItem('user'));
-   this.survey.Auth = user.id;
+   this.survey.Author = user.id;
    this.survey.Title = this.Title;
    this.survey.Desc = this.Desc;
     this.hideDescription = true;

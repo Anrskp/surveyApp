@@ -26,32 +26,39 @@ let mySurvey = {
 // Create survey
 router.post('/createNewSurvey', (req, res, next) => {
   try {
-    surveyCRUD.createNewSurve(req.body).then(x => {
+    surveyCRUD.createNewSurvey(req.body).then(x => {
       res.json({
+        success:true,
         data: x
       });
     })
   } catch (e) {
+    console.log(e);
     res.json({
-      error: 'there was an error! try again later'
+      success : false,
+      msg:'Something went wrong'
     })
   }
 });
 
 // Get surveys overview
 router.post('/getSurveys', (req, res, next) => {
+
   try {
-    surveyCRUD.getSurvey(req.body).then(x => {
+    surveyCRUD.getSurvey(req.body.userID).then(x => {
+      //res.send(x)
       res.json({
-        data: x
+        success : true,
+        survey : x
       })
     })
   } catch (e) {
     res.json({
-      error: 'there was an error! try again later'
+      success : false,
+      msg:'Something went wrong'
     })
   }
-})
+});
 
 // Get survey data
 
