@@ -1,0 +1,24 @@
+<!-- Radio buttons -->
+
+<h2> This is your survey!</h2>
+
+<div *ngFor="let question of survey.Questions; index as j">
+  <form #f="ngForm">
+    <h3>{{question.Question}}</h3>
+    <div *ngFor="let answer of question.Answers;" class="radio">
+      <label><input type="radio" (click)="getValue(something.value)" name="something" [value]="answer" ngModel >{{answer}}</label>
+      </div>
+      <!--
+      <label><input type="radio" name="question{{j}}" [value]="question.Answers[0]" ngModel >{{question.Answers[0]}}</label>
+    </div>
+    <div class="radio">
+      <label><input type="radio" name="question{{j}}" [value]="question.Answers[1]" ngModel>{{question.Answers[1]}}</label>
+    </div>
+    <div class="radio">
+      <label><input type="radio" name="question{{j}}" [value]="question.Answers[2]" ngModel>{{question.Answers[2]}}</label>
+    </div> -->
+  </form>
+
+</div>
+
+<button class="btn btn-primary" (click)="sendSurveyAnswers()">Send</button>

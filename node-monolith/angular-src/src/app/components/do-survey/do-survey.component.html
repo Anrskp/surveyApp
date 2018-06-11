@@ -1,0 +1,14 @@
+<!-- Radio buttons -->
+<div class="container center_div">
+<h2 style="margin-bottom:36px;"> {{survey.Title}}</h2>
+
+<div *ngFor="let question of survey.Questions; index as j">
+  <form #f="ngForm">
+    <h3>{{question.Question}}</h3>
+    <div *ngFor="let answer of question.Answers;" class="radio">
+      <label><input type="radio" (change)="radioChangeHandler($event)" [name]="question.Question" [value]="answer" >{{answer}}</label>
+      </div>
+  </form>
+</div>
+<button class="btn btn-primary" (click)="sendSurveyAnswers()">Send</button>
+</div>

@@ -1,0 +1,13 @@
+<h1 style="text-align: center;">Welcome to your dashboard</h1>
+<div class="container" style="width:500px; margin-top:50px;">
+<ul class="list-group">
+  <div *ngFor="let survey of surveyArray">
+
+      <li class="list-group-item list-group-item-action text-center" > {{ survey.Title }} &nbsp;
+        <button type="button" class="btn btn-light " style="cursor: pointer;" (click)="viewSurveyResults(survey)"> View </button>
+        <button type="button" class="btn btn-light " style="cursor: pointer;" (click)="deleteSurvey(survey)"> Delete</button>
+
+      </li>
+  </div>
+</ul>
+</div>

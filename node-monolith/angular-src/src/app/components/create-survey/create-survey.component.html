@@ -1,0 +1,80 @@
+<div class="container">
+
+
+  <!--  {{diagnostic}} -->
+    <form (ngSubmit)="onSubmit()" [hidden]="hideDescription" #surveyDescriptionForm="ngForm">
+
+      <div  class="form-group">
+        <h2>Please create your survey by filling in the fields below</h2>
+        <br>
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" required [(ngModel)] = "Title" name="Title" placeholder="Please enter your survey title">
+      </div>
+
+      <div class="form-group">
+        <label for="Desc">Description</label>
+        <input type="text" class="form-control" id="Desc" required [(ngModel)] = "Desc" name="Desc" placeholder="Please enter your survey description">
+      </div>
+
+      <button type="button" class="btn btn-success" (click)="addDescription(); surveyDescriptionForm.reset()" id="addDescriptionButton">Add</button>
+    </form>
+
+<div [hidden]="hideQuestions">
+<form (ngSubmit)="onSubmit()" #questionForm="ngForm">
+      <div class="form-group">
+        <label for="Question">Question</label>
+        <input type="text" class="form-control" id="Question" required [(ngModel)] = "Question" name="Question" placeholder="Please enter your question">
+      </div>
+
+      <div class="form-group">
+        <label for="Answer1">First answer</label>
+        <input type="text" class="form-control" id="Answer1" [(ngModel)] = "Answer1" name="Answer1" placeholder="Please enter your answer">
+      </div>
+
+      <div class="form-group">
+        <label for="Answer2">Second answer</label>
+        <input type="text" class="form-control" id="Answer2" [(ngModel)] = "Answer2" name="Answer2" placeholder="Please enter your answer">
+      </div>
+
+      <div class="form-group">
+        <label for="Answer3">Third answer</label>
+        <input type="text" class="form-control" id="Answer3" [(ngModel)] = "Answer3" name="Answer3" placeholder="Please enter your answer">
+      </div>
+      <button type="button" class="btn btn-success" (click)="newQuestion(); questionForm.reset()" id="addNewButton" >Add new question</button>
+      <button type="button" class="btn btn-success"  (click)="sendSurvey();">Send survey(s)</button>
+      <button type="button" class="btn btn-success" (click)="newSurvey();questionForm.reset(); surveyDescriptionForm.reset()">Create new survey</button>
+
+    </form>
+</div>
+</div>
+
+<!-- <div [hidden]="!submitted">
+
+
+
+  <div *ngFor="let question of questions">
+  <h2>{{question.Title}}</h2>
+  <div class="row">
+    <div class="col-xs-3">Question:</div>
+    <div class="col-xs-9  pull-left">{{question.title}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">First choice:</div>
+    <div class="col-xs-9 pull-left">{{question.choice1}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Second choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice2}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Third choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice3}}</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">Fourth choice:</div>
+    <div class="col-xs-9 pull-left">{{ question.choice4}}</div>
+  </div>
+  <br>
+  </div>
+  <button class="btn btn-primary" (click)="submitted=false">Send</button>
+</div> -->

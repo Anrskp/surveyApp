@@ -31,7 +31,7 @@ const app = express();
 
 // Set Static Folder
 // <insert angular static folder here>
-
+app.use(express.static(path.join(__dirname, './angular-src/dist')));
 // CORS Middleware
 app.use(cors());
 
@@ -57,6 +57,6 @@ app.listen(port, () => {
 
 
 // Testing RabbitMQ
-const surveyCRUD = require('./rabbitMQ/surveyCRUD');
+//const surveyCRUD = require('./rabbitMQ/surveyCRUD');
 
-surveyCRUD.getSurvey('John Wick').then(x => console.log(x));
+//surveyCRUD.getSurvey('John Wick').then(x => console.log(x));
