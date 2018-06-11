@@ -1,6 +1,5 @@
 const amqp = require('amqplib/callback_api');
 const config = require('../config/config')
-// import config with amqp conn
 
 // Create a new survey
 module.exports.createNewSurvey = function(survey) {
@@ -10,9 +9,7 @@ module.exports.createNewSurvey = function(survey) {
         ch.assertQueue('', {
           exclusive: true
         }, function(err, q) {
-          let corr = generateUuid();
-          let currsurvey = survey;
-          console.log('Sending a create survey request..');
+          const corr = generateUuid();
 
           ch.consume(q.queue, function(msg) {
             if (msg.properties.correlationId === corr) {
@@ -27,7 +24,7 @@ module.exports.createNewSurvey = function(survey) {
           });
 
           ch.sendToQueue('rpc_save_survey',
-            new Buffer(JSON.stringify(currsurvey)), {
+            new Buffer(JSON.stringify(survey)), {
               correlationId: corr,
               replyTo: q.queue
             });
@@ -37,7 +34,7 @@ module.exports.createNewSurvey = function(survey) {
   })
 }
 
-// Get survey(s)
+// Get survey overview
 module.exports.getSurvey = function(name) {
   return new Promise((resolve, reject) => {
     amqp.connect(config.rabbitConnUrl, function(err, conn) {
@@ -72,12 +69,39 @@ module.exports.getSurvey = function(name) {
 }
 
 // Get specific survey data
-module.exports.getSurveyData = () => {
-  // todo
+module.exports.getSurveyDataByID = (surveyID) => {
+  return new Promise((resolve, reject) => {
+    amqp.connect(config.rabbitConnUrl, function(err, conn) {
+      conn.createChannel(function(err, ch) {
+        ch.assertQueue('', {
+          exclusive: true
+        }, function(err, q) {
+          let corr = generateUuid();
+
+          ch.consume(q.queue, function(msg) {
+            if (msg.properties.correlationId === corr) {
+              resolve(msg.content.toString());
+              setTimeout(function() {
+                conn.close();
+              }, 500);
+            }
+          }, {
+            noAck: true
+          });
+
+          ch.sendToQueue('rpc_single_survey',
+            new Buffer(surveyID), {
+              correlationId: corr,
+              replyTo: q.queue
+            });
+        });
+      });
+    });
+  })
 }
 
-// Delete specific survey
 module.exports.deleteSurvey = () => {
+  // Delete specific survey
   // todo
 }
 
@@ -91,17 +115,9 @@ module.exports.sendAnswers = () => {
   // todo
 }
 
-
+// Generate ID
 function generateUuid() {
   return Math.random().toString() +
     Math.random().toString() +
     Math.random().toString();
 }
-
-
-
-
-
-
-
-// TEMPLATE
