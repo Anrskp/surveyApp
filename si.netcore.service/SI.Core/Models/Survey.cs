@@ -9,6 +9,7 @@ namespace SystemIntegration_2018.Models
 {
     class Survey
     {
+        [JsonProperty("ID")]
         string id;
         [JsonProperty("Author")]
         string owner;
