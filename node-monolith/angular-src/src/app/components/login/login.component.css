@@ -1,0 +1,16 @@
+.center_div{
+  margin-top:10rem;
+  width:20% ;
+
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+.btn .btn-primary{
+  width:50%;
+
+}
+.container{
+
+  border-style:ridge;
+  border-radius: 25px;
+}
