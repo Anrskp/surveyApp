@@ -26,18 +26,32 @@ let mySurvey = {
 // Create survey
 router.post('/createNewSurvey', (req, res, next) => {
   try {
-    surveyCRUD.sendSurvey(req.body).then(x => {
+    surveyCRUD.createNewSurve(req.body).then(x => {
       res.json({
         data: x
       });
     })
   } catch (e) {
-    res.json({error: 'there was an error! try again later'})
+    res.json({
+      error: 'there was an error! try again later'
+    })
   }
 });
 
 // Get surveys overview
-
+router.post('/getSurveys', (req, res, next) => {
+  try {
+    surveyCRUD.getSurvey(req.body).then(x => {
+      res.json({
+        data: x
+      })
+    })
+  } catch (e) {
+    res.json({
+      error: 'there was an error! try again later'
+    })
+  }
+})
 
 // Get survey data
 
@@ -46,7 +60,9 @@ router.post('/createNewSurvey', (req, res, next) => {
 
 
 // Get a specific survey
-
+router.post('/getSurveyByID', (req, res, next) => {
+  // todo
+})
 
 // Send in answers for specific survey
 
