@@ -44,12 +44,16 @@ router.post('/getSurveys', (req, res, next) => {
 router.post('/getSurveyByID', (req, res, next) => {
   try {
     surveyCRUD.getSurveyDataByID(req.body.userID).then(x => {
-      res.send(x);
+      res.json({
+        success: true,
+        survey: x
+      })
     })
   } catch (e) {
     console.error(e);
     res.json({
-      error: 'there was an error! try again later'
+      success: false,
+      msg: 'Something went wrong'
     })
   }
 })
