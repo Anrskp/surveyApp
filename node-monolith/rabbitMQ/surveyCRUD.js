@@ -26,7 +26,7 @@ module.exports.createNewSurvey = function(survey) {
             noAck: true
           });
 
-          ch.sendToQueue('rpc_queue',
+          ch.sendToQueue('rpc_save_survey',
             new Buffer(JSON.stringify(currsurvey)), {
               correlationId: corr,
               replyTo: q.queue
@@ -104,4 +104,4 @@ function generateUuid() {
 
 
 
-// TEMPLATE 
+// TEMPLATE
