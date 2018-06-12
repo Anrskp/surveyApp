@@ -1,21 +1,21 @@
 const amqp = require('amqplib/callback_api');
 const config = require('../config/config')
 
+/*
 // Create a new survey
-module.exports.createNewSurvey = function(survey) {
+module.exports.createNewSurvey = (survey) => {
   return new Promise((resolve, reject) => {
-    amqp.connect(config.rabbitConnUrl, function(err, conn) {
-      conn.createChannel(function(err, ch) {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
         ch.assertQueue('', {
           exclusive: true
-        }, function(err, q) {
+        }, (err, q) => {
           const corr = generateUuid();
 
-          ch.consume(q.queue, function(msg) {
+          ch.consume(q.queue, (msg) => {
             if (msg.properties.correlationId === corr) {
-              //console.log(' [.] Got %s', msg.content.toString());
               resolve(msg.content.toString());
-              setTimeout(function() {
+              setTimeout(() => {
                 conn.close();
               }, 500);
             }
@@ -35,21 +35,21 @@ module.exports.createNewSurvey = function(survey) {
 }
 
 // Get survey overview
-module.exports.getSurvey = function(name) {
+module.exports.getSurvey = (name) => {
   return new Promise((resolve, reject) => {
-    amqp.connect(config.rabbitConnUrl, function(err, conn) {
-      conn.createChannel(function(err, ch) {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
         ch.assertQueue('', {
           exclusive: true
-        }, function(err, q) {
+        }, (err, q) => {
           let corr = generateUuid();
           console.log('sending a get survey request..');
 
-          ch.consume(q.queue, function(msg) {
+          ch.consume(q.queue, (msg) => {
             if (msg.properties.correlationId === corr) {
               //console.log(' [.] Got %s', msg.content.toString());
               resolve(msg.content.toString());
-              setTimeout(function() {
+              setTimeout(() => {
                 conn.close();
               }, 500);
             }
@@ -68,20 +68,20 @@ module.exports.getSurvey = function(name) {
   })
 }
 
-// Get specific survey data
-module.exports.getSurveyDataByID = (surveyID) => {
+// Get specific survey
+module.exports.getSurveyByID = (surveyID) => {
   return new Promise((resolve, reject) => {
-    amqp.connect(config.rabbitConnUrl, function(err, conn) {
-      conn.createChannel(function(err, ch) {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
         ch.assertQueue('', {
           exclusive: true
-        }, function(err, q) {
+        }, (err, q) => {
           let corr = generateUuid();
 
-          ch.consume(q.queue, function(msg) {
+          ch.consume(q.queue, (msg) => {
             if (msg.properties.correlationId === corr) {
               resolve(msg.content.toString());
-              setTimeout(function() {
+              setTimeout(() => {
                 conn.close();
               }, 500);
             }
@@ -100,24 +100,136 @@ module.exports.getSurveyDataByID = (surveyID) => {
   })
 }
 
-module.exports.deleteSurvey = () => {
-  // Delete specific survey
-  // todo
+module.exports.deleteSurvey = (surveyID) => {
+  return new Promise((resolve, reject) => {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
+        ch.assertQueue('', {
+          exclusive: true
+        }, (err, q) => {
+          let corr = generateUuid();
+
+          ch.consume(q.queue, (msg) => {
+            if (msg.properties.correlationId === corr) {
+              resolve(msg.content.toString());
+              setTimeout(() => {
+                conn.close();
+              }, 500);
+            }
+          }, {
+            noAck: true
+          });
+
+          ch.sendToQueue('rpc_single_survey',
+            new Buffer(surveyID), {
+              correlationId: corr,
+              replyTo: q.queue
+            });
+        });
+      });
+    });
+  })
 }
 
-// Get a specific survey
-module.exports.getSurveyByID = () => {
-  // todo
+// Get a specific surveys results data
+module.exports.getSurveyResultsByID = (surveyID) => {
+  return new Promise((resolve, reject) => {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
+        ch.assertQueue('', {
+          exclusive: true
+        }, (err, q) => {
+          let corr = generateUuid();
+
+          ch.consume(q.queue, (msg) => {
+            if (msg.properties.correlationId === corr) {
+              resolve(msg.content.toString());
+              setTimeout(() => {
+                conn.close()
+              }, 500)
+            }
+          }, {
+            noAck: true
+          });
+
+          ch.sendToQueue('rpc_single_survey',
+            new Buffer(surveyID), {
+              correlationId: corr,
+              replyTo: q.queue
+            });
+        });
+      });
+    });
+  })
 }
 
 // Send in answers to a specific survey
-module.exports.sendAnswers = () => {
-  // todo
-}
+module.exports.sendAnswers = (surveyID) => {
+  return new Promise((resolve, reject) => {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
+        ch.assertQueue('', {
+          exclusive: true
+        }, (err, q) => {
+          let corr = generateUuid();
 
+          ch.consume(q.queue, (msg) => {
+            if (msg.properties.correlationId === corr) {
+              resolve(msg.content.toString());
+              setTimeout(() => {
+                conn.close()
+              }, 500)
+            }
+          }, {
+            noAck: true
+          });
+
+          ch.sendToQueue('get_answers', new Buffer(surveyID), {
+            correlationId: corr,
+            replyTo: q.queue
+          });
+        });
+      });
+    });
+  })
+}
+*/
 // Generate ID
 function generateUuid() {
   return Math.random().toString() +
     Math.random().toString() +
     Math.random().toString();
+}
+
+
+
+// TESTING
+module.exports.RPC = (parameter, queue) => {
+  return new Promise((resolve, reject) => {
+    amqp.connect(config.rabbitConnUrl, (err, conn) => {
+      conn.createChannel((err, ch) => {
+        ch.assertQueue('', {
+          exclusive: true
+        }, (err, q) => {
+          let corr = generateUuid();
+
+          ch.consume(q.queue, (msg) => {
+            if (msg.properties.correlationId === corr) {
+              resolve(msg.content.toString());
+              setTimeout(() => {
+                conn.close()
+              }, 500)
+            }
+          }, {
+            noAck: true
+          });
+
+          ch.sendToQueue(queue, new Buffer(parameter), {
+            correlationId: corr,
+            replyTo: q.queue
+          });
+        });
+      });
+    });
+  })
 }
