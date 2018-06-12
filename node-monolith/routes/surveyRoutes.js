@@ -1,10 +1,17 @@
+"use strict";
+
 const express = require('express');
 const passport = require('passport');
 const surveyCRUD = require('../rabbitMQ/surveyCRUD');
 const router = express.Router();
 
-// Passport Authenticate Middleware
-// passport.authenticate('jwt', { session: false })
+/*
+
+ TODO : insert Passport Authenticate Middleware  < passport.authenticate('jwt', { session: false }) >
+        check and foward messages from .NET service
+
+*/
+
 
 // Create a survey
 router.post('/createNewSurvey', (req, res, next) => {
@@ -63,39 +70,78 @@ router.post('/getSurveyByID', (req, res, next) => {
 // Send in answers for specific survey
 router.post('/sendSurveyAnswers', (req, res, next) => {
 
-    let answers = JSON.stringify(req.body);
+  let answers = JSON.stringify(req.body);
 
-    try {
-      surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
-          res.json({
-            success: true,
-            msg: 'Your answers have been saved! thanks for participating'
-          })
-        })
-      }
-      catch (e) {
-        console.error(e);
-        res.json({
-          success: false,
-          msg: 'Something went wrong!'
-        })
-      }
+  try {
+    surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
+      console.log(x)
+
+      if(x.success == true) {
+
+      res.json({
+        success: true,
+        msg: 'Your answers have been saved! thanks for participating'
+      })
+    })
+  } else {
+    res.json({
+      success: false,
+      msg: 'Something went wrong try again later'
+    })
+  }
+  } catch (e) {
+    console.error(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    })
+  }
 })
-
-// send email notification with survey link
-router.post('/sendEmailNotification', (req, res, next) => {
-  // todo
-});
 
 // Get survey data
 router.post('/getSurveyData', (req, res, next) => {
-  // todo
+  const surveyID = req.body;
+
+  try {
+    surveyCRUD.RPC(surveyID, 'que_name').then(x => {
+      res.json({
+        success: true,
+        survey: x
+      })
+    })
+  } catch (e) {
+    console.error(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    })
+  }
 });
 
 // Delete survey
-
 router.post('/deleteSurveyByID', (req, res, next) => {
-  // todo
+
+  const surveyToDelete = req.body;
+
+  try {
+    surveyCRUD.RPC(surveyToDelete, 'que_name').then(x => {
+      res.json({
+        success: true,
+        msg: 'Survey deleted!'
+      })
+    })
+  } catch (e) {
+    console.error(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    })
+  }
+});
+
+// send email notification with survey link
+router.post('/sendEmailNotification', (req, res, next) => {
+  // TODO
 });
 
 module.exports = router;
