@@ -194,13 +194,13 @@ module.exports.sendAnswers = (surveyID) => {
   })
 }
 */
+
 // Generate ID
 function generateUuid() {
   return Math.random().toString() +
     Math.random().toString() +
     Math.random().toString();
 }
-
 
 
 // TESTING
