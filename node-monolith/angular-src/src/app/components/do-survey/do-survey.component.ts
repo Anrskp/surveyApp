@@ -77,23 +77,24 @@ removeDuplicates(myArr, prop) {
 sendSurveyAnswers(){
 
   let test = this.removeDuplicates(this.answersArray, "Question")
-  console.log(test);
-  this.flashMessage.show("Thank you for filling out our survey",{
-  cssClass: 'alert-success',
-  timeout: 5000});
 
-  // this.surveyService.sendSurveyAnswers(test).subscribe(data =>{
-  //   if(data.success){
-  //     this.flashMessage.show("Thank you for filling out our survey",{
-  //     cssClass: 'alert-success',
-  //     timeout: 5000});
-  //   }
-  //   else
-  //   {
-  //     this.flashMessage.show("Something went wrong, please try again",{
-  //     cssClass: 'alert-danger',
-  //     timeout: 5000});
-  //   }
-  // });
+  // console.log(test);
+  // this.flashMessage.show("Thank you for filling out our survey",{
+  // cssClass: 'alert-success',
+  // timeout: 5000});
+
+  this.surveyService.sendSurveyAnswers(test).subscribe(data =>{
+    if(data.success){
+      this.flashMessage.show("Thank you for filling out our survey",{
+      cssClass: 'alert-success',
+      timeout: 5000});
+    }
+    else
+    {
+      this.flashMessage.show("Something went wrong, please try again",{
+      cssClass: 'alert-danger',
+      timeout: 5000});
+    }
+  });
   }
 }

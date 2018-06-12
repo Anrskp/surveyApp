@@ -1,22 +1,25 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
 const surveyCRUD = require('../rabbitMQ/surveyCRUD');
+const router = express.Router();
+
+// Passport Authenticate Middleware
+// passport.authenticate('jwt', { session: false })
 
 // Create a survey
 router.post('/createNewSurvey', (req, res, next) => {
   try {
-    let param = JSON.stringify(req.body)
-    surveyCRUD.RPC(param, 'rpc_save_survey').then(x => {
+    let newSurvey = JSON.parse(req.body);
+    surveyCRUD.RPC(newSurvey, 'rpc_save_survey').then(x => {
       res.json({
-        success:true,
+        success: true,
         data: x
       });
     })
   } catch (e) {
     res.json({
-      success : false,
-      msg:'Something went wrong'
+      success: false,
+      msg: 'Something went wrong'
     })
   }
 });
@@ -25,16 +28,15 @@ router.post('/createNewSurvey', (req, res, next) => {
 router.post('/getSurveys', (req, res, next) => {
   try {
     surveyCRUD.RPC(req.body.userID, 'rpc_return_surveys_unpop').then(x => {
-      //res.send(x)
       res.json({
-        success : true,
-        survey : x
+        success: true,
+        survey: x
       })
     })
   } catch (e) {
     res.json({
-      success : false,
-      msg:'Something went wrong'
+      success: false,
+      msg: 'Something went wrong'
     })
   }
 });
@@ -57,41 +59,44 @@ router.post('/getSurveyByID', (req, res, next) => {
   }
 })
 
+
+// Send in answers for specific survey
+router.post('/sendSurveyAnswers', (req, res, next) => {
+
+    let answers = JSON.stringify(req.body);
+
+    try {
+      surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
+          res.json({
+            success: true,
+            msg: 'Your answers have been saved! thanks for participating'
+          })
+        }
+      }
+      catch (e) {
+        console.error(e);
+        res.json({
+          success: false,
+          msg: 'Something went wrong!'
+        })
+      }
+    })
+}
+
+// send email notification with survey link
+router.post('/sendEmailNotification', (req, res, next) => {
+  // todo
+});
+
 // Get survey data
 router.post('/getSurveyData', (req, res, next) => {
   // todo
-})
-
+});
 
 // Delete survey
+
 router.post('/deleteSurveyByID', (req, res, next) => {
   // todo
-})
-
-
-// Send in answers for specific survey
-
-
-// send email notification with survey link
+});
 
 module.exports = router;
-
-// Example survey
-let testSurvey = {
-  "Title": "John's Survey",
-  "Desc": "A Survey about john",
-  "Author": "123131313", // user ID
-  "Questions": [{
-      "Question": "how old is john",
-      "Answers": ["20yo", "25yo", "30yo"]
-    },
-    {
-      "Question": "FEAR OF THE DARK",
-      "Answers": ["magnum", "9mm", "desert eagle"]
-    },
-    {
-      "Question": "which car does john drive",
-      "Answers": ["Fiat Punto", "mazda 3", "Volvo"]
-    }
-  ]
-}
