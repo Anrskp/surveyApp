@@ -7,7 +7,6 @@ const surveyCRUD = require('../rabbitMQ/surveyCRUD');
 router.post('/createNewSurvey', (req, res, next) => {
   try {
     surveyCRUD.sendSurveyTest(req.body).then(x => {
-    surveyCRUD.createNewSurvey(req.body).then(x => {
       res.json({
         success:true,
         data: x
@@ -43,7 +42,7 @@ router.post('/getSurveys', (req, res, next) => {
 // Get a specific survey
 router.post('/getSurveyByID', (req, res, next) => {
   try {
-    surveyCRUD.getSurveyDataByID(req.body.userID).then(x => {
+    surveyCRUD.getSurveyDataByID(req.body.surveyID).then(x => {
       res.json({
         success: true,
         survey: x

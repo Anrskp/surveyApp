@@ -21,4 +21,26 @@ export class SurveyService {
     return this.http.post('http://localhost:5000/survey/getSurveys', userID,{headers: headers})
     .map(res => res.json());
   }
+
+  getSurvey(surveyID){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:5000/survey/getSurveyByID', surveyID,{headers: headers})
+    .map(res => res.json());
+  }
+
+  // sendSurveyAnswers(surveyAnswers){
+  //   let headers = new Headers();
+  //   headers.append('Content-Type', 'application/json');
+  //   return this.http.post('http://localhost:5000/survey/sendSurveyAnswers', surveyAnswers,{headers: headers})
+  //   .map(res => res.json());
+  // }
+  //
+  // getSurveyData(surveyID){
+  //   let headers = new Headers();
+  //   headers.append('Content-Type', 'application/json');
+  //   return this.http.post('http://localhost:5000/survey/getSurveyData', surveyID,{headers: headers})
+  //   .map(res => res.json());
+  // }
+
 }
