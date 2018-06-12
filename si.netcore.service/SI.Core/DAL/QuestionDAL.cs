@@ -20,12 +20,12 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@question_text", questionText));
                     cmd.Parameters.Add(new SqlParameter("@question_pos", questionPos));
                     connection.Open();
-                    Console.WriteLine("Connected!");
+                    Console.WriteLine("     [.] Connected!");
                     try
                     {
-                        Console.WriteLine("Adding new singular question!");
+                        Console.WriteLine("     [.] Adding new singular question!");
                         cmd.ExecuteNonQuery();
-                        Console.WriteLine("New singular question added!");
+                        Console.WriteLine("     [.] New singular question added!");
                     }
                     //Exceptions that are raised by errors in the procedure
                     catch (SqlException ex)
@@ -79,9 +79,9 @@ namespace SystemIntegration_2018
                     Console.WriteLine("Connected!");
                     try
                     {
-                        Console.WriteLine("Adding new multiple question!");
+                        Console.WriteLine("     [.] Adding new multiple question!");
                         cmd.ExecuteNonQuery();
-                        Console.WriteLine("New multiple question added!");
+                        Console.WriteLine("     [.] New multiple question added!");
                     }
                     //Exceptions that are raised by errors in the procedure
                     catch (SqlException ex)
@@ -104,7 +104,7 @@ namespace SystemIntegration_2018
                             while (reader.Read())
                             {
                                 questionID = reader.GetString(reader.GetOrdinal("id"));
-                                Console.WriteLine($"ID retrieved: {questionID}");
+                                Console.WriteLine($"     [.] ID retrieved: {questionID}");
                             }
                         }
                     }

@@ -80,16 +80,20 @@ namespace SI.Core
             //}
             //Console.ReadLine();
 
-            SurveyDAL surveyDAL = new SurveyDAL();
-            var survey = surveyDAL.GetSurveyData("C454FFE4-8");
-            Console.WriteLine(survey.Name);
-            Console.WriteLine(survey.Description);
-            foreach (var q in survey.QuestionsMultipleChoice)
-            {
-                Console.WriteLine(q.QuestionField);
-            }
-            Console.WriteLine();
-            Console.ReadLine();
+            //SurveyDAL surveyDAL = new SurveyDAL();
+            //var survey = surveyDAL.GetSurveyData("C454FFE4-8");
+            //Console.WriteLine(survey.Name);
+            //Console.WriteLine(survey.Description);
+            //foreach (var q in survey.QuestionsMultipleChoice)
+            //{
+            //    Console.WriteLine(q.QuestionField);
+            //}
+            //Console.WriteLine();
+            //Console.ReadLine();
+            //---------------------------------
+
+            Receiver receiver = new Receiver();
+            receiver.StartRPCListener();
         }
 
         private async Task ListenForRPC()
@@ -153,53 +157,5 @@ namespace SI.Core
             //Console.ReadLine();
         }
 
-        private static async Task SaveSurveyInDB(string json)
-        {
-            Console.WriteLine("Deserializing and saving in the db!");
-            try
-            {
-                Survey survey = JsonConvert.DeserializeObject<Survey>(json);
-                SurveyDAL surveyDal = new SurveyDAL();
-                QuestionDAL questionDal = new QuestionDAL();
-                bool check = false;
-                string surveyID = surveyDal.NewSurvey(survey.Owner, survey.Name, survey.Description);
-                int counter = 0;
-                foreach (var question in survey.QuestionsMultipleChoice)
-                {
-                    counter++;
-                    string answerOne = "", answerTwo = "", answerThree = "", answerFour = "";
-                    switch (question.AnswersField.Count)
-                    {
-                        case 2:
-                            answerOne = question.AnswersField[0];
-                            answerTwo = question.AnswersField[1];
-                            break;
-                        case 3:
-                            answerOne = question.AnswersField[0];
-                            answerTwo = question.AnswersField[1];
-                            answerThree = question.AnswersField[2];
-                            break;
-                        case 4:
-                            answerOne = question.AnswersField[0];
-                            answerTwo = question.AnswersField[1];
-                            answerThree = question.AnswersField[2];
-                            answerFour = question.AnswersField[3];
-                            break;
-                        default:
-                            break;
-                    }
-                    string mQuestionID = questionDal.NewQuestionMultiple(surveyID, question.QuestionField, answerOne, answerTwo, answerThree, answerFour, counter);
-                    if (mQuestionID != null || mQuestionID != "")
-                    {
-                        check = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Could not save and deserialize! - {ex.ToString()}");
-                throw;
-            }
-        }
     }
 }

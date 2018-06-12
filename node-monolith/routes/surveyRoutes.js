@@ -6,7 +6,8 @@ const surveyCRUD = require('../rabbitMQ/surveyCRUD');
 // Create a survey
 router.post('/createNewSurvey', (req, res, next) => {
   try {
-    surveyCRUD.sendSurveyTest(req.body).then(x => {
+    let param = JSON.stringify(req.body)
+    surveyCRUD.RPC(param, 'rpc_save_survey').then(x => {
       res.json({
         success:true,
         data: x
@@ -22,9 +23,8 @@ router.post('/createNewSurvey', (req, res, next) => {
 
 // Get surveys overview (id, name, author, desc)
 router.post('/getSurveys', (req, res, next) => {
-
   try {
-    surveyCRUD.getSurvey(req.body.userID).then(x => {
+    surveyCRUD.RPC(req.body.userID, 'rpc_return_surveys_unpop').then(x => {
       //res.send(x)
       res.json({
         success : true,
@@ -42,7 +42,7 @@ router.post('/getSurveys', (req, res, next) => {
 // Get a specific survey
 router.post('/getSurveyByID', (req, res, next) => {
   try {
-    surveyCRUD.getSurveyDataByID(req.body.surveyID).then(x => {
+    surveyCRUD.RPC(req.body.surveyID, 'rpc_single_survey').then(x => {
       res.json({
         success: true,
         survey: x
@@ -58,13 +58,15 @@ router.post('/getSurveyByID', (req, res, next) => {
 })
 
 // Get survey data
+router.post('/getSurveyData', (req, res, next) => {
+  // todo
+})
+
 
 // Delete survey
 router.post('/deleteSurveyByID', (req, res, next) => {
   // todo
 })
-
-
 
 
 // Send in answers for specific survey
@@ -73,10 +75,6 @@ router.post('/deleteSurveyByID', (req, res, next) => {
 // send email notification with survey link
 
 module.exports = router;
-
-
-
-
 
 // Example survey
 let testSurvey = {

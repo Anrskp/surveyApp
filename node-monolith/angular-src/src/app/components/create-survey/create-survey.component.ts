@@ -45,8 +45,9 @@ export class CreateSurveyComponent implements OnInit {
   }
   sendSurvey()
   {
-    let survey = JSON.stringify(this.survey);
-    this.surveyService.sendSurvey(survey).subscribe(data =>{
+    //let survey = JSON.stringify(this.survey);
+    //console.log(this.survey);
+    this.surveyService.sendSurvey(this.survey).subscribe(data =>{
           if(data.success)
           {
               this.flashMessage.show('Survey is successfully saved into the databasse',{
