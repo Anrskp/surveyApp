@@ -74,28 +74,30 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
 
   try {
     surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
-      console.log(x)
+        console.log(x)
 
-      if(x.success == true) {
+        if (x.success == true) {
 
-      res.json({
-        success: true,
-        msg: 'Your answers have been saved! thanks for participating'
+          res.json({
+            success: true,
+            msg: 'Your answers have been saved! thanks for participating'
+          })
+        } else {
+          res.json({
+            success: false,
+            msg: 'Something went wrong try again later'
+          })
+        }
       })
-    })
-  } else {
-    res.json({
-      success: false,
-      msg: 'Something went wrong try again later'
-    })
-  }
-  } catch (e) {
-    console.error(e);
-    res.json({
-      success: false,
-      msg: 'Something went wrong!'
-    })
-  }
+    }
+    catch (e) {
+      console.error(e);
+      res.json({
+        success: false,
+        msg: 'Something went wrong!'
+      })
+    }
+
 })
 
 // Get survey data
