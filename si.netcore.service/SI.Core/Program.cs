@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SI.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -94,6 +95,13 @@ namespace SI.Core
 
             Receiver receiver = new Receiver();
             receiver.StartRPCListener();
+
+            //AnswerMultiple answer = new AnswerMultiple();
+            //answer.QID = "2E2D9337-F";
+            //answer.Answer = "A";
+            //var converted = JsonConvert.SerializeObject(answer);
+            //Console.WriteLine(converted);
+            //Console.ReadLine();
         }
 
         private async Task ListenForRPC()

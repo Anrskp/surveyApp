@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SystemIntegration_2018.Models
 {
-    class Survey
+    public class Survey
     {
         [JsonProperty("ID")]
         string id;
