@@ -71,7 +71,7 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
             success: true,
             msg: 'Your answers have been saved! thanks for participating'
           })
-        }
+        })
       }
       catch (e) {
         console.error(e);
@@ -80,8 +80,7 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
           msg: 'Something went wrong!'
         })
       }
-    })
-}
+})
 
 // send email notification with survey link
 router.post('/sendEmailNotification', (req, res, next) => {
