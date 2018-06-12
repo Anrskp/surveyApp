@@ -17,11 +17,21 @@ const router = express.Router();
 router.post('/createNewSurvey', (req, res, next) => {
   try {
     let newSurvey = JSON.parse(req.body);
+
     surveyCRUD.RPC(newSurvey, 'rpc_save_survey').then(x => {
-      res.json({
-        success: true,
-        data: x
-      });
+      let reply = JSON.parse(x);
+
+      if (reply.success) {
+        res.json({
+          success: true,
+          data: x
+        });
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong'
+        });
+      }
     })
   } catch (e) {
     res.json({
@@ -35,6 +45,15 @@ router.post('/createNewSurvey', (req, res, next) => {
 router.post('/getSurveys', (req, res, next) => {
   try {
     surveyCRUD.RPC(req.body.userID, 'rpc_return_surveys_unpop').then(x => {
+      let reply = JSON.parse(x)
+
+      if (!reply.success) {
+        res.json({
+          success: false,
+          msg: 'Something went wrong'
+        });
+      }
+
       res.json({
         success: true,
         survey: x
@@ -52,10 +71,18 @@ router.post('/getSurveys', (req, res, next) => {
 router.post('/getSurveyByID', (req, res, next) => {
   try {
     surveyCRUD.RPC(req.body.surveyID, 'rpc_single_survey').then(x => {
-      res.json({
-        success: true,
-        survey: x
-      })
+      let reply = JSON.parse(x);
+      if (reply.success) {
+        res.json({
+          success: true,
+          survey: x
+        })
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong'
+        })
+      }
     })
   } catch (e) {
     console.error(e);
@@ -74,29 +101,29 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
 
   try {
     surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
-        console.log(x)
 
-        if (x.success == true) {
+      let reply = JSON.parse(x);
 
-          res.json({
-            success: true,
-            msg: 'Your answers have been saved! thanks for participating'
-          })
-        } else {
-          res.json({
-            success: false,
-            msg: 'Something went wrong try again later'
-          })
-        }
-      })
-    }
-    catch (e) {
-      console.error(e);
-      res.json({
-        success: false,
-        msg: 'Something went wrong!'
-      })
-    }
+      if (reply.success) {
+
+        res.json({
+          success: true,
+          msg: 'Your answers have been saved! thanks for participating'
+        })
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong try again later'
+        })
+      }
+    })
+  } catch (e) {
+    console.error(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    })
+  }
 
 })
 
@@ -106,10 +133,20 @@ router.post('/getSurveyData', (req, res, next) => {
 
   try {
     surveyCRUD.RPC(surveyID, 'que_name').then(x => {
-      res.json({
-        success: true,
-        survey: x
-      })
+
+      let reply = JSON.parse(reply)
+
+      if (reply.success) {
+        res.json({
+          success: true,
+          survey: x
+        })
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong!'
+        })
+      }
     })
   } catch (e) {
     console.error(e);
@@ -127,10 +164,20 @@ router.post('/deleteSurveyByID', (req, res, next) => {
 
   try {
     surveyCRUD.RPC(surveyToDelete, 'que_name').then(x => {
-      res.json({
-        success: true,
-        msg: 'Survey deleted!'
-      })
+
+      let reply = JSON.parse(x)
+
+      if (reply.success) {
+        res.json({
+          success: true,
+          msg: 'Survey deleted!'
+        })
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong!'
+        })
+      }
     })
   } catch (e) {
     console.error(e);

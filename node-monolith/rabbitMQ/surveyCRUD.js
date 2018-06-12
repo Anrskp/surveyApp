@@ -19,14 +19,14 @@ module.exports.RPC = (parameter, queue) => {
           exclusive: true
         }, (err, q) => {
 
-          if(err) {
-            reject(err); 
+          if (err) {
+            reject(err);
           }
 
-          let corr = generateUuid();
+          let corrID = generateUuid();
 
           ch.consume(q.queue, (msg) => {
-            if (msg.properties.correlationId === corr) {
+            if (msg.properties.correlationId === corrID) {
               resolve(msg.content.toString());
               setTimeout(() => {
                 conn.close()
@@ -37,7 +37,7 @@ module.exports.RPC = (parameter, queue) => {
           });
 
           ch.sendToQueue(queue, new Buffer(parameter), {
-            correlationId: corr,
+            correlationId: corrID,
             replyTo: q.queue
           });
         });
