@@ -41,12 +41,13 @@ export class CreateSurveyComponent implements OnInit {
     console.log(this.Surveys);
     this.hideDescription = false;
     this.hideQuestions = true;
-    //this.router.navigate(['/doSurvey']);
+
   }
   sendSurvey()
   {
-    let survey = JSON.stringify(this.survey);
-    this.surveyService.sendSurvey(survey).subscribe(data =>{
+    //let survey = JSON.stringify(this.survey);
+    //console.log(this.survey);
+    this.surveyService.sendSurvey(this.survey).subscribe(data =>{
           if(data.success)
           {
               this.flashMessage.show('Survey is successfully saved into the databasse',{
@@ -72,6 +73,9 @@ export class CreateSurveyComponent implements OnInit {
       "Question":this.Question,
       "Answers":[ this.Answer1, this.Answer2, this.Answer3]};
       this.survey.Questions.push(question);
+      this.flashMessage.show('Question successfully added',{
+      cssClass: 'alert-success',
+      timeout: 5000});
     }
 
  addDescription()
@@ -82,6 +86,9 @@ export class CreateSurveyComponent implements OnInit {
    this.survey.Desc = this.Desc;
     this.hideDescription = true;
     this.hideQuestions = false;
+    this.flashMessage.show('Description successfully added',{
+    cssClass: 'alert-success',
+    timeout: 5000});
 
  }
 

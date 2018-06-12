@@ -17,6 +17,7 @@ import { DoSurveyComponent } from './components/do-survey/do-survey.component';
 import{AuthGuard} from  './guards/auth.guard';
 import { CreateSurveyComponent } from './components/create-survey/create-survey.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { SurveyDataComponent } from './components/survey-data/survey-data.component';
 
 
 const appRoutes: Routes = [
@@ -25,7 +26,8 @@ const appRoutes: Routes = [
     {path:'register', component: RegisterComponent},
     {path:'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate:[AuthGuard]},
     {path:'doSurvey/:id', component:DoSurveyComponent},
-    {path:'createSurvey', component:CreateSurveyComponent, pathMatch: 'full', canActivate:[AuthGuard]}
+    {path:'createSurvey', component:CreateSurveyComponent, pathMatch: 'full', canActivate:[AuthGuard]},
+    {path:'surveyData', component:SurveyDataComponent, pathMatch: 'full', canActivate:[AuthGuard]}
 ]
 
 @NgModule({
@@ -37,7 +39,8 @@ const appRoutes: Routes = [
       DashboardComponent,
       DoSurveyComponent,
       CreateSurveyComponent,
-      NavbarComponent
+      NavbarComponent,
+      SurveyDataComponent
   ],
   imports: [
     BrowserModule,

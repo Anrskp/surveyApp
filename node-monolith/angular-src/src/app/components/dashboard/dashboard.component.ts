@@ -13,7 +13,8 @@ import{FlashMessagesService} from 'angular2-flash-messages';
 export class DashboardComponent implements OnInit {
 
   surveyArray = [];
-  constructor(private surveyService: SurveyService,private flashMessage:FlashMessagesService) { }
+//  testArray = ["Cars","Motors", "Planes"]
+  constructor(private surveyService: SurveyService,private flashMessage:FlashMessagesService, private router: Router) { }
 
   ngOnInit() {
     let user = JSON.parse(localStorage.getItem('user'));
@@ -41,11 +42,10 @@ export class DashboardComponent implements OnInit {
   }
 
 viewSurveyResults(survey){
-  alert(survey);
+  this.router.navigate(['surveyData']);
 }
 deleteSurvey(survey){
   alert(survey+" is going to be deleted");
 }
-
 
   }
