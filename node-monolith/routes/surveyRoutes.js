@@ -74,9 +74,9 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
 
   try {
     surveyCRUD.RPC(answers, 'rpc_save_answers').then(x => {
-        console.log(x)
+        let reply = (JSON.parse(x));
 
-        if (x.success == true) {
+        if (reply.success == true) {
 
           res.json({
             success: true,
@@ -105,7 +105,7 @@ router.post('/getSurveyData', (req, res, next) => {
   const surveyID = req.body;
 
   try {
-    surveyCRUD.RPC(surveyID, 'que_name').then(x => {
+    surveyCRUD.RPC(surveyID, 'rpc_survey_results').then(x => {
       res.json({
         success: true,
         survey: x

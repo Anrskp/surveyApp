@@ -37,7 +37,7 @@ export class DoSurveyComponent implements OnInit {
         if(data.success)
         {
           this.survey = JSON.parse(data.survey);
-          console.log(this.survey);
+          //console.log(this.survey);
         }
         else
         {
@@ -53,12 +53,12 @@ export class DoSurveyComponent implements OnInit {
    this.selectedAnswer = event.target.value;
    this.selectedQuestion = event.target.name;
 
-   let answer = {"Question":this.selectedQuestion, "Answer":this.selectedAnswer};
+   let answer = {"QID":this.selectedQuestion, "Answer":this.selectedAnswer};
    this.answersArray.push(answer);
 
    for (var item in this.answersArray)
    {
-     if(this.answersArray[item].Question == this.selectedQuestion)
+     if(this.answersArray[item].QID == this.selectedQuestion)
      {
 
       this.answersArray[item].Answer = this.selectedAnswer;
@@ -76,9 +76,8 @@ removeDuplicates(myArr, prop) {
 
 sendSurveyAnswers(){
 
-  let test = this.removeDuplicates(this.answersArray, "Question")
-
-  // console.log(test);
+  let test = this.removeDuplicates(this.answersArray, "QID");
+   //console.log(test);
   // this.flashMessage.show("Thank you for filling out our survey",{
   // cssClass: 'alert-success',
   // timeout: 5000});
