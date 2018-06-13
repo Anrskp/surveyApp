@@ -11,7 +11,7 @@ namespace SystemIntegration_2018
     class SurveyDAL
     {
         
-        public string NewSurvey(string userID, string surveryName, string surveyDescription)
+        public async Task<string> NewSurvey(string userID, string surveryName, string surveyDescription)
         {
             string surveyID = null;
             using (var connection = ConnectionManager.GetConnection())
@@ -35,9 +35,8 @@ namespace SystemIntegration_2018
                     //Exceptions that are raised by errors in the procedure
                     catch (SqlException ex)
                     {
-                        Console.WriteLine("Oh no (survey problem)!");
+                        Console.WriteLine("[x] Oh no (survey problem)!");
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
                 }
 
@@ -145,7 +144,7 @@ namespace SystemIntegration_2018
                     QuestionMultiple question;
                     var questions = new List<QuestionMultiple>();
                     using (SqlCommand cmd = new SqlCommand(
-                        $"SELECT question_pos, question_text, option_one, option_two, option_three, option_four " +
+                        $"SELECT id, question_pos, question_text, option_one, option_two, option_three, option_four " +
                         $"FROM dbo.QuestionMultiple WHERE survey_id = @survey_id"
                         , connection))
                     {
@@ -159,13 +158,14 @@ namespace SystemIntegration_2018
                                 {
                                     while (reader.Read())
                                     {
+                                        var id = reader.GetString(reader.GetOrdinal("id"));
                                         var pos = reader.GetInt32(reader.GetOrdinal("question_pos"));
                                         var text = reader.GetString(reader.GetOrdinal("question_text"));
                                         var one = reader.GetString(reader.GetOrdinal("option_one"));
                                         var two = reader.GetString(reader.GetOrdinal("option_two"));
                                         var three = reader.GetString(reader.GetOrdinal("option_three"));
                                         var four = reader.GetString(reader.GetOrdinal("option_four"));
-                                        question = new QuestionMultiple(text, new List<string>() { one, two, three, four });
+                                        question = new QuestionMultiple(id, text, new List<string>() { one, two, three, four });
                                         questions.Add(question);
                                     }
                                 }
@@ -230,7 +230,7 @@ namespace SystemIntegration_2018
                 QuestionMultiple question;
                 var questions = new List<QuestionMultiple>();
                 using (SqlCommand cmd = new SqlCommand(
-                    $"SELECT question_pos, question_text, option_one, option_two, option_three, option_four " +
+                    $"SELECT id, question_pos, question_text, option_one, option_two, option_three, option_four " +
                     $"FROM dbo.QuestionMultiple WHERE survey_id = @survey_id"
                     , connection))
                 {
@@ -244,13 +244,14 @@ namespace SystemIntegration_2018
                             {
                                 while (reader.Read())
                                 {
+                                    var id = reader.GetString(reader.GetOrdinal("id"));
                                     var pos = reader.GetInt32(reader.GetOrdinal("question_pos"));
                                     var text = reader.GetString(reader.GetOrdinal("question_text"));
                                     var one = reader.GetString(reader.GetOrdinal("option_one"));
                                     var two = reader.GetString(reader.GetOrdinal("option_two"));
                                     var three = reader.GetString(reader.GetOrdinal("option_three"));
                                     var four = reader.GetString(reader.GetOrdinal("option_four"));
-                                    question = new QuestionMultiple(text, new List<string>() { one, two, three, four });
+                                    question = new QuestionMultiple(id, text, new List<string>() { one, two, three, four });
                                     questions.Add(question);
                                 }
                             }

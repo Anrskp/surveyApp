@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace SystemIntegration_2018
 {
     class QuestionDAL
     {
-        public string NewQuestionSingular(string surveyID, string questionText, int questionPos)
+        public async Task<string> NewQuestionSingular(string surveyID, string questionText, int questionPos)
         {
             string questionID = null;
             using (var connection = ConnectionManager.GetConnection())
@@ -30,9 +31,8 @@ namespace SystemIntegration_2018
                     //Exceptions that are raised by errors in the procedure
                     catch (SqlException ex)
                     {
-                        Console.WriteLine("Oh no (singular question problem)!");
+                        Console.WriteLine("[x] Oh no (singular question problem)!");
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
                 }
 
@@ -57,7 +57,7 @@ namespace SystemIntegration_2018
             return questionID;
         }
 
-        public string NewQuestionMultiple
+        public async Task<string> NewQuestionMultiple
             (string surveyID, string questionText, string optionOne, string optionTwo, string optionThree, string optionFour, int questionPos)
         {
             string questionID = null;
@@ -86,9 +86,8 @@ namespace SystemIntegration_2018
                     //Exceptions that are raised by errors in the procedure
                     catch (SqlException ex)
                     {
-                        Console.WriteLine("Oh no (multiple question problem)!");
+                        Console.WriteLine("[x] Oh no (multiple question problem)!");
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
                 }
 
