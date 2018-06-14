@@ -57,12 +57,12 @@ router.post('/getSurveys', (req, res, next) => {
           success: false,
           msg: 'Something went wrong'
         });
+      } else {
+        res.json({
+          success: true,
+          survey: JSON.stringify(reply.body)
+        })
       }
-
-      res.json({
-        success: true,
-        survey: reply.body
-      })
     })
   } catch (e) {
     res.json({
@@ -81,7 +81,7 @@ router.post('/getSurveyByID', (req, res, next) => {
       if (reply.success) {
         res.json({
           success: true,
-          survey: x
+          survey: JSON.stringify(reply.body)
         })
       } else {
         res.json({
@@ -147,7 +147,7 @@ router.post('/getSurveyData', (req, res, next) => {
       if (reply.success) {
         res.json({
           success: true,
-          survey: x
+          survey: JSON.stringify(reply.body)
         })
       } else {
         res.json({
