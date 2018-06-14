@@ -6,7 +6,7 @@
   <form #f="ngForm">
     <h3>{{question.Question}}</h3>
     <div *ngFor="let answer of question.Answers;" class="radio">
-      <label><input type="radio" (change)="radioChangeHandler($event)" [name]="question.Question" [value]="answer" >{{answer}}</label>
+      <label><input type="radio" (change)="radioChangeHandler($event)" [name]="question.ID" [value]="answer" >{{answer}}</label>
       </div>
   </form>
 </div>
