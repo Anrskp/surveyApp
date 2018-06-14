@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SystemIntegration_2018.Models
 {
-    class QuestionMultiple
+    public class QuestionMultiple
     {
         [JsonIgnore]
         Survey owner;
@@ -22,13 +22,16 @@ namespace SystemIntegration_2018.Models
         [JsonIgnore]
         string optionFour;
 
+        [JsonProperty("ID")]
+        string id;
         [JsonProperty("Question")]
         string questionField;
         [JsonProperty("Answers")]
         List<string> answersField;
 
-        public QuestionMultiple(string text, List<string> answers)
+        public QuestionMultiple(string id, string text, List<string> answers)
         {
+            this.id = id;
             this.QuestionField = text;
             this.AnswersField = answers;
         }
