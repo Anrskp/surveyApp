@@ -81,7 +81,7 @@ router.post('/getSurveyByID', (req, res, next) => {
       if (reply.success) {
         res.json({
           success: true,
-          survey: x
+          survey: reply.body
         })
       } else {
         res.json({
