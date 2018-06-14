@@ -61,7 +61,7 @@ router.post('/getSurveys', (req, res, next) => {
 
       res.json({
         success: true,
-        survey: x
+        survey: reply.body
       })
     })
   } catch (e) {
@@ -81,7 +81,7 @@ router.post('/getSurveyByID', (req, res, next) => {
       if (reply.success) {
         res.json({
           success: true,
-          survey: reply.body
+          survey: x
         })
       } else {
         res.json({
