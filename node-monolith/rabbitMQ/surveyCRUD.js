@@ -18,11 +18,11 @@ module.exports.RPC = (parameter, queue) => {
         ch.assertQueue('', {
           exclusive: true
         }, (err, q) => {
-
+          /*
           if (err) {
             reject(err);
           }
-
+          */
           let corrID = generateUuid();
 
           ch.consume(q.queue, (msg) => {

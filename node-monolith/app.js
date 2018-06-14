@@ -56,3 +56,39 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log('Server startet on port ' + port);
 });
+
+
+
+
+// testing localdb
+const surveyCRUD = require('./rabbitMQ/surveyCRUD');
+
+let mySurvey = {
+  "Title": "John's Survey",
+  "Desc": "A Survey about john",
+  "Author": "John Wick",
+  "Questions": [{
+      "Question": "how old is john",
+      "Answers": ["20yo", "25yo", "30yo"]
+    },
+    {
+      "Question": "FEAR OF THE DARK",
+      "Answers": ["magnum", "9mm", "desert eagle"]
+    },
+    {
+      "Question": "which car does john drive",
+      "Answers": ["Fiat Punto", "mazda 3", "Volvo"]
+    }
+  ]
+}
+/*
+surveyCRUD.RPC(JSON.stringify(mySurvey), 'rpc_save_survey').then(x => {
+  console.log(x);
+})
+*/
+
+/*
+surveyCRUD.RPC('C454FFE4-8', 'rpc_survey_results').then(x => {
+  console.log(x);
+})
+*/

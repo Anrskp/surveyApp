@@ -12,19 +12,18 @@ const router = express.Router();
 
 */
 
-
 // Create a survey
 router.post('/createNewSurvey', (req, res, next) => {
   try {
-    let newSurvey = JSON.parse(req.body);
+    let newSurvey = JSON.stringify(req.body);
 
     surveyCRUD.RPC(newSurvey, 'rpc_save_survey').then(x => {
+
       let reply = JSON.parse(x);
 
       if (reply.success) {
         res.json({
           success: true,
-          data: x
         });
       } else {
         res.json({
@@ -32,8 +31,10 @@ router.post('/createNewSurvey', (req, res, next) => {
           msg: 'Something went wrong'
         });
       }
+
     })
   } catch (e) {
+    console.log(e);
     res.json({
       success: false,
       msg: 'Something went wrong'
@@ -44,8 +45,12 @@ router.post('/createNewSurvey', (req, res, next) => {
 // Get surveys overview (id, name, author, desc)
 router.post('/getSurveys', (req, res, next) => {
   try {
-    surveyCRUD.RPC(req.body.userID, 'rpc_return_surveys_unpop').then(x => {
-      let reply = JSON.parse(x)
+    let surveyID = JSON.stringify(req.body.userID);
+    console.log('Survey id' + surveyID);
+
+    surveyCRUD.RPC(surveyID, 'rpc_return_surveys_unpop').then(x => {
+      console.log(x);
+      let reply = JSON.parse(x);
 
       if (!reply.success) {
         res.json({
@@ -72,6 +77,7 @@ router.post('/getSurveyByID', (req, res, next) => {
   try {
     surveyCRUD.RPC(req.body.surveyID, 'rpc_single_survey').then(x => {
       let reply = JSON.parse(x);
+
       if (reply.success) {
         res.json({
           success: true,
@@ -129,12 +135,14 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
 
 // Get survey data
 router.post('/getSurveyData', (req, res, next) => {
-  const surveyID = req.body;
+  const surveyID = (req.body.surveyID);
 
   try {
-    surveyCRUD.RPC(surveyID, 'que_name').then(x => {
+    surveyCRUD.RPC(surveyID, 'rpc_survey_results').then(x => {
 
-      let reply = JSON.parse(reply)
+      console.log(x);
+
+      let reply = JSON.parse(x)
 
       if (reply.success) {
         res.json({
@@ -160,10 +168,10 @@ router.post('/getSurveyData', (req, res, next) => {
 // Delete survey
 router.post('/deleteSurveyByID', (req, res, next) => {
 
-  const surveyToDelete = req.body;
+  const surveyToDelete = req.body.surveyID;
 
   try {
-    surveyCRUD.RPC(surveyToDelete, 'que_name').then(x => {
+    surveyCRUD.RPC(surveyToDelete, 'rpc_delete_survey').then(x => {
 
       let reply = JSON.parse(x)
 
