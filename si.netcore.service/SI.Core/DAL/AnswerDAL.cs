@@ -23,7 +23,7 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@question_id", questionID));
                     cmd.Parameters.Add(new SqlParameter("@answer_text", answerText));
                     connection.Open();
-                    Console.WriteLine("     [.] Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         Console.WriteLine("     [.] Adding new singular answer!");
@@ -76,7 +76,7 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@option_three", optionThree));
                     cmd.Parameters.Add(new SqlParameter("@option_four", optionFour));
                     connection.Open();
-                    Console.WriteLine("     [.] Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         Console.WriteLine("     [.] Adding new multiple answer!");
@@ -119,7 +119,7 @@ namespace SystemIntegration_2018
                     // Add parameter to the command, which will be passed to the stored procedure
                     cmd.Parameters.Add(new SqlParameter("@surveyID", surveyID));
                     connection.Open();
-                    Console.WriteLine("     [.] Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())

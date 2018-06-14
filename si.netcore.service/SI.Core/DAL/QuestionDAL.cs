@@ -21,7 +21,7 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@question_text", questionText));
                     cmd.Parameters.Add(new SqlParameter("@question_pos", questionPos));
                     connection.Open();
-                    Console.WriteLine("     [.] Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         Console.WriteLine("     [.] Adding new singular question!");
@@ -76,7 +76,7 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@option_four", optionFour));
                     cmd.Parameters.Add(new SqlParameter("@question_pos", questionPos));
                     connection.Open();
-                    Console.WriteLine("Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         Console.WriteLine("     [.] Adding new multiple question!");
