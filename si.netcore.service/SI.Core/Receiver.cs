@@ -10,7 +10,6 @@ namespace SystemIntegration_2018
 {
     class Receiver
     {
-
         ConnectionFactory factory = new ConnectionFactory()
         {
             HostName = "sheep.rmq.cloudamqp.com",
@@ -25,45 +24,6 @@ namespace SystemIntegration_2018
         bool keepOpenSaveSurvey = true;
         bool keepOpenGetSurvey = true;
         bool keepOpenGetSurveysUnpopulated = true;
-        private async Task BeginListening()
-        {
-            Console.WriteLine("Beggining to listen for a survey.");
-            using (var connection = factory.CreateConnection())
-            {
-                using (var channel = connection.CreateModel())
-                {
-                    try
-                    {
-                        channel.QueueDeclare(queue: "req",
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-                        var consumer = new EventingBasicConsumer(channel);
-                        consumer.Received += (model, ea) =>
-                        {
-                            var body = ea.Body;
-                            var message = Encoding.UTF8.GetString(body);
-                            Console.WriteLine(" [x] Received {0}", message);
-                            localQueue.Enqueue(message);
-                            channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                        };
-                        channel.BasicConsume(queue: "req",
-                                             autoAck: false,
-                                             consumer: consumer);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                    
-                    while (keepOpen)
-                    {
-                        await Task.Delay(100);
-                    }
-                }
-            }
-        }
 
         private async Task SaveSurveyRPC()
         {
@@ -96,7 +56,7 @@ namespace SystemIntegration_2018
                                 var message = Encoding.UTF8.GetString(body);
                                 Console.WriteLine($"[x] Request has been made: {message}");
                                 bool result = await rpctask.SaveSurveyInDB(message);
-                                response = "{\"success\":" + result +"}";
+                                response = "{\"success\":" + result.ToString().ToLower() +"}";
                             }
                             catch (Exception e)
                             {
@@ -410,6 +370,75 @@ namespace SystemIntegration_2018
             Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
         }
 
+        private async Task DeleteSurveyRPC()
+        {
+            string queueName = "rpc_delete_survey";
+            Console.WriteLine($"[x] Starting to listen on {queueName} queue!");
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    try
+                    {
+                        channel.QueueDeclare(queue: queueName, durable: true,
+                          exclusive: false, autoDelete: false, arguments: null);
+                        channel.BasicQos(0, 1, false);
+                        var consumer = new EventingBasicConsumer(channel);
+                        channel.BasicConsume(queue: queueName,
+                          autoAck: false, consumer: consumer);
+                        Console.WriteLine("[x] Awaiting RPC requests");
+
+                        consumer.Received += async (model, ea) =>
+                        {
+                            string response = null;
+
+                            var body = ea.Body;
+                            var props = ea.BasicProperties;
+                            var replyProps = channel.CreateBasicProperties();
+                            replyProps.CorrelationId = props.CorrelationId;
+                            try
+                            {
+                                var message = Encoding.UTF8.GetString(body);
+                                Console.WriteLine($"[x] Request has been made: {message}");
+                                var json = await rpctask.DeleteSurvey(message);
+                                response = json;
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(" [.] " + e.Message);
+                                response = "";
+                                Console.ReadLine();
+                            }
+                            finally
+                            {
+                                Console.WriteLine($"[x] Response is:");
+                                Console.WriteLine(response);
+                                var responseBytes = Encoding.UTF8.GetBytes(response);
+                                channel.BasicPublish(exchange: "", routingKey: props.ReplyTo,
+                                  basicProperties: replyProps, body: responseBytes);
+                                channel.BasicAck(deliveryTag: ea.DeliveryTag,
+                                  multiple: false);
+                                Console.WriteLine($"[x] Response made on {props.ReplyTo}.");
+                                Console.WriteLine($"[x] Time: {DateTime.UtcNow.TimeOfDay}");
+                                Console.WriteLine();
+                            }
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        Console.ReadLine();
+                    }
+
+                    while (keepOpenGetSurvey)
+                    {
+                        await Task.Delay(100);
+                    }
+                }
+            }
+            Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
+        }
+
         public int GetMessageCount()
         {
             return localQueue.Count;
@@ -429,24 +458,14 @@ namespace SystemIntegration_2018
             return "";
         }
 
-        public async Task StartListener()
-        {
-            BeginListening();
-        }
-        
         public async Task StartRPCListener()
         {
-            //BeginListeningRPC();
             GetSurveysUnpopulatedRPC();
             GetPopulatedSurveyRPC();
             SaveSurveyRPC();
             SaveAnswersRPC();
             GetSurveyResultsRPC();
-        }
-
-        private static string RPCCall()
-        {
-            return "I've been returned!";
+            DeleteSurveyRPC();
         }
     }
 }

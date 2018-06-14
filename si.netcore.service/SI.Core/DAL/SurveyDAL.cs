@@ -25,7 +25,7 @@ namespace SystemIntegration_2018
                     cmd.Parameters.Add(new SqlParameter("@survey_name", surveryName));
                     cmd.Parameters.Add(new SqlParameter("@survey_description", surveyDescription));
                     connection.Open();
-                    Console.WriteLine("     [.] Connected!");
+                    Console.WriteLine("     [.] Connected! -----------------------");
                     try
                     {
                         Console.WriteLine("     [.] Adding new survey!");
@@ -66,13 +66,14 @@ namespace SystemIntegration_2018
             var surveys = new List<Survey>();
             using (var connection = ConnectionManager.GetConnection())
             {
-                using (SqlCommand cmd = new SqlCommand(
-                    $"SELECT id, user_owner, survey_name, survey_description " +
-                    $"FROM dbo.Survey WHERE user_owner = @user_owner"
-                    , connection))
+                try
                 {
-                    try
+                    using (SqlCommand cmd = new SqlCommand(
+                    "SELECT id, user_owner, survey_name, survey_description " +
+                    "FROM dbo.Survey WHERE user_owner = @user_owner AND is_closed = 0"
+                    , connection))
                     {
+                    
                         cmd.Parameters.AddWithValue("user_owner", userID);
                         connection.Open();
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -91,11 +92,11 @@ namespace SystemIntegration_2018
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                        return null;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return null;
                 }
             }
             return surveys;
@@ -108,7 +109,7 @@ namespace SystemIntegration_2018
             {
                 using (SqlCommand cmd = new SqlCommand(
                     $"SELECT id, user_owner, survey_name, survey_description " +
-                    $"FROM dbo.Survey WHERE user_owner = @user_owner"
+                    $"FROM dbo.Survey WHERE user_owner = @user_owner AND is_closed = 0"
                     , connection))
                 {
                     try
@@ -192,8 +193,8 @@ namespace SystemIntegration_2018
             using (var connection = ConnectionManager.GetConnection())
             {
                 using (SqlCommand cmd = new SqlCommand(
-                    $"SELECT id, user_owner, survey_name, survey_description " +
-                    $"FROM dbo.Survey WHERE id = @surveyID"
+                    "SELECT id, user_owner, survey_name, survey_description " +
+                    "FROM dbo.Survey WHERE id = @surveyID AND is_closed = 0"
                     , connection))
                 {
                     try
@@ -267,6 +268,30 @@ namespace SystemIntegration_2018
                 survey.QuestionsMultipleChoice = questions;
             }
             return survey;
+        }
+
+        public async Task<bool> DeleteSurvey(string surveyID)
+        {
+            using (var connection = ConnectionManager.GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand($"UPDATE dbo.Survey SET is_closed = 1 WHERE id = @surveyID", connection))
+                {
+                    try
+                    {
+                        cmd.Parameters.AddWithValue("surveyID", surveyID);
+                        connection.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                        }
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        return false;
+                    }
+                }
+            }
         }
     }
 }

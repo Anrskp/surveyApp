@@ -11,6 +11,10 @@ namespace SI.Core
 {
     public class RPCTasks
     {
+        AnswerDAL answerDAL = new AnswerDAL();
+        QuestionDAL questionDAL = new QuestionDAL();
+        SurveyDAL surveyDAL = new SurveyDAL();
+
         public async Task<bool> SaveSurveyInDB(string json)
         {
             Console.WriteLine("     [.]Deserializing and saving in the db!");
@@ -18,10 +22,8 @@ namespace SI.Core
             try
             {
                 Survey survey = JsonConvert.DeserializeObject<Survey>(json);
-                SurveyDAL surveyDal = new SurveyDAL();
-                QuestionDAL questionDal = new QuestionDAL();
 
-                string surveyID = await surveyDal.NewSurvey(survey.Owner, survey.Name, survey.Description);
+                string surveyID = await surveyDAL.NewSurvey(survey.Owner, survey.Name, survey.Description);
                 int counter = 0;
                 foreach (var question in survey.QuestionsMultipleChoice)
                 {
@@ -48,7 +50,7 @@ namespace SI.Core
                         default:
                             break;
                     }
-                    string mQuestionID = await questionDal.NewQuestionMultiple(surveyID, question.QuestionField, answerOne, answerTwo, answerThree, answerFour, counter);
+                    string mQuestionID = await questionDAL.NewQuestionMultiple(surveyID, question.QuestionField, answerOne, answerTwo, answerThree, answerFour, counter);
                     //if at least 1 question is saved we'd consider it a success
                     if (mQuestionID != null || mQuestionID != "")
                     {
@@ -59,19 +61,18 @@ namespace SI.Core
             catch (Exception ex)
             {
                 Console.WriteLine($"Could not save and deserialize! - {ex.ToString()}");
-                throw;
+                check = false;
             }
             return check;
         }
 
         public async Task<string> GetSurveysForID(string userId)
         {
-            SurveyDAL survey = new SurveyDAL();
-            var surveys = await survey.GetAllSurveys(userId);
+            var surveys = await surveyDAL.GetAllSurveys(userId);
             //if retrieval has failed
             if (surveys == null)
             {
-                return "{\"success\": false}";
+                return "{\"success\": false, \"body\": \"\"}";
             }
             List<string> jsons = new List<string>();
             foreach (var item in surveys)
@@ -83,8 +84,7 @@ namespace SI.Core
                 Console.WriteLine(item);
                 Console.WriteLine();
             }
-            var list = JsonConvert.SerializeObject(jsons);
-            return list;
+            return "{\"success\": true, \"body\":" + JsonConvert.SerializeObject(jsons) + "}";
         }
 
         public async Task<string> GetPopulatedSurvey(string surveyID)
@@ -93,14 +93,13 @@ namespace SI.Core
             var survey = await surveyDAL.GetSurveyData(surveyID);
             if (survey == null)
             {
-                return "{\"success\": false}";
+                return "{\"success\": false, \"body\": \"\"}";
             }
-            return JsonConvert.SerializeObject(survey);
+            return "{\"success\": true, \"body\":" + JsonConvert.SerializeObject(survey) + "}";
         }
 
         public async Task<string> SaveSurveyAnswer(string json)
         {
-            AnswerDAL answerDAL = new AnswerDAL();
             var answers = JsonConvert.DeserializeObject<List<AnswerMultiple>>(json);
             int count = 0;
             foreach (var answer in answers)
@@ -114,20 +113,22 @@ namespace SI.Core
             //if 10 % of the answers were not saved for whatever reason
             if (count > (10/100 * answers.Count))
             {
-                return "{\"success\": false}";
+                return "{\"success\": false, \"body\": \"\"}";
             }
-            return "{\"success\": true}";
+            return "{\"success\": true, \"body\": \"Hurray!\"}";
         }
 
         public async Task<string> ReturnSurveyAnswers(string surveyID)
         {
-            AnswerDAL answerDAL = new AnswerDAL();
             var results = await answerDAL.GetAnswersForSurvey(surveyID);
             var json = JsonConvert.SerializeObject(results);
-            Console.WriteLine(json);
-            return json;
-
+            return "{\"success\": true, \"body\":" + json + "}";
         }
 
+        public async Task<string> DeleteSurvey(string surveyID)
+        {
+            var result = await surveyDAL.DeleteSurvey(surveyID);
+            return "{\"success\":" + result.ToString().ToLower() +", \"body\": \"Hurray!\"}";
+        }
     }
 }
