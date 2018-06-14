@@ -45,7 +45,7 @@ router.post('/createNewSurvey', (req, res, next) => {
 // Get surveys overview (id, name, author, desc)
 router.post('/getSurveys', (req, res, next) => {
   try {
-    let surveyID = JSON.stringify(req.body.userID);
+    let surveyID = (req.body.userID);
     console.log('Survey id' + surveyID);
 
     surveyCRUD.RPC(surveyID, 'rpc_return_surveys_unpop').then(x => {
