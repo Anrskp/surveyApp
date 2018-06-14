@@ -36,11 +36,11 @@ export class SurveyService {
     .map(res => res.json());
   }
 
-  // getSurveyData(surveyID){
-  //   let headers = new Headers();
-  //   headers.append('Content-Type', 'application/json');
-  //   return this.http.post('http://localhost:5000/survey/getSurveyData', surveyID,{headers: headers})
-  //   .map(res => res.json());
-  // }
+  getSurveyData(surveyID){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:5000/survey/getSurveyData', surveyID,{headers: headers})
+    .map(res => res.json());
+  }
 
 }
