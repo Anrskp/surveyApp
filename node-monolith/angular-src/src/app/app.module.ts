@@ -27,7 +27,7 @@ const appRoutes: Routes = [
     {path:'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate:[AuthGuard]},
     {path:'doSurvey/:id', component:DoSurveyComponent},
     {path:'createSurvey', component:CreateSurveyComponent, pathMatch: 'full', canActivate:[AuthGuard]},
-    {path:'surveyData', component:SurveyDataComponent, pathMatch: 'full', canActivate:[AuthGuard]}
+    {path:'surveyData/:id', component:SurveyDataComponent, pathMatch: 'full', canActivate:[AuthGuard]}
 ]
 
 @NgModule({
@@ -49,7 +49,7 @@ const appRoutes: Routes = [
     HttpModule,
     FlashMessagesModule.forRoot()
   ],
-  providers: [AuthServiceService,SurveyService,AuthGuard],
+  providers: [AuthServiceService, SurveyService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

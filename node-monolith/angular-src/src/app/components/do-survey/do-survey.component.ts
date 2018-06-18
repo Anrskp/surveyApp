@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import {SurveyService} from '../../services/survey.service';
 import{FlashMessagesService} from 'angular2-flash-messages';
 
-
 @Component({
   selector: 'app-do-survey',
   templateUrl: './do-survey.component.html',
@@ -11,7 +10,7 @@ import{FlashMessagesService} from 'angular2-flash-messages';
 })
 export class DoSurveyComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,private surveyService: SurveyService,private flashMessage:FlashMessagesService) { }
+  constructor(private route: ActivatedRoute, private surveyService: SurveyService,private flashMessage:FlashMessagesService) { }
 
   survey = {
    "ID":"",

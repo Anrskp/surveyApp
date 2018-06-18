@@ -1,9 +1,13 @@
+/*
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+*/
+
+// Imports
 const ChartController = require('./ChartController');
 const amqp = require('amqplib/callback_api');
-const fs = require('fs');
 const connString = "amqp://okigdyac:qAAeul-Jo8naKIbhwMxFxtjwnCn8MLbP@sheep.rmq.cloudamqp.com/okigdyac";
 
 /*
@@ -27,6 +31,7 @@ app.listen(port, () => {
 });
 */
 
+// Connect and listen to rabbitMQ queue
 amqp.connect(connString, function(err, conn) {
   conn.createChannel(function(err, ch) {
     var q = 'rpc_gen_graph';
@@ -35,14 +40,17 @@ amqp.connect(connString, function(err, conn) {
     ch.prefetch(1);
     console.log(' [x] Awaiting RPC requests');
 
+    // Receive message
     ch.consume(q, function reply(msg) {
 
       console.log(" [x] Received request : ", msg.content.toString());
 
-      // get image png
+      // Get image png buffer
       ChartController.generateChart().then(imageBuffer => {
+        // Use base64
         var encodedBuffer = imageBuffer.toString('base64');
 
+        // Send response
         ch.sendToQueue(msg.properties.replyTo,
           new Buffer(encodedBuffer),
           {correlationId: msg.properties.correlationId});

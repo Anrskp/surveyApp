@@ -198,12 +198,18 @@ router.post('/deleteSurveyByID', (req, res, next) => {
 
 router.get('/generateGraph', (req, res, next) => {
 
+  console.log(req.body);
+
+  let questionID = 'testGraph';
+  let questionLabels = ['ad', 'ad', 'ad'];
+  let questionData = [12, 43 ,21];
+
   try {
     surveyCRUD.RPC('test', 'rpc_gen_graph').then(data => {
       var buf = Buffer.from(data, 'base64');
 
-      fs.createWriteStream("angular-src/src/assets/graphImages/testGraph.png").write(buf);
-      fs.createWriteStream("angular-src/src/assets/graphImages/testGraph.png").end();
+      fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").write(buf);
+      fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").end();
 
       res.json({
         success: true
