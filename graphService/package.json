@@ -1,0 +1,21 @@
+{
+  "name": "graphservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "body-parser": "*",
+    "canvas": "^1.6.11",
+    "chart.js": "^2.7.2",
+    "chartjs-node": "^1.7.1",
+    "cors": "*",
+    "express": "*"
+  },
+  "author": "Anders Kaae Pedersen",
+  "license": "ISC"
+}

@@ -4,7 +4,7 @@ const express = require('express');
 const passport = require('passport');
 const surveyCRUD = require('../rabbitMQ/surveyCRUD');
 const router = express.Router();
-
+const fs = require('fs');
 /*
 
  TODO : insert Passport Authenticate Middleware  < passport.authenticate('jwt', { session: false }) >
@@ -195,6 +195,28 @@ router.post('/deleteSurveyByID', (req, res, next) => {
     })
   }
 });
+
+router.get('/generateGraph', (req, res, next) => {
+
+  try {
+    surveyCRUD.RPC('test', 'rpc_gen_graph').then(data => {
+      var buf = Buffer.from(data, 'base64');
+
+      fs.createWriteStream("angular-src/src/assets/graphImages/testGraph.png").write(buf);
+      fs.createWriteStream("angular-src/src/assets/graphImages/testGraph.png").end();
+
+      res.json({
+        success: true
+      })
+
+    })
+  } catch (e) {
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    });
+  }
+})
 
 // send email notification with survey link
 router.post('/sendEmailNotification', (req, res, next) => {
