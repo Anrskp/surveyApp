@@ -18,7 +18,6 @@ namespace SystemIntegration_2018.Models
         bool isClosed;
         [JsonProperty("Questions")]
         List<QuestionMultiple> questionsMultipleChoice;
-        List<QuestionSingular> questionsSingleChoice;
 
         [JsonConstructor]
         public Survey(string owner, string name, string description, List<QuestionMultiple> questionsMultipleChoice)
