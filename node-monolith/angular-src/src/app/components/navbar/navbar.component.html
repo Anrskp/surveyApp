@@ -10,7 +10,6 @@
          <a class="nav-link" [routerLinkActive] = "['active']" [routerLink] = "['/createSurvey']">Create survey</a>
        </li>
        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a></li>
-       <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact:true}"><a class="nav-link" [routerLink]="['/doSurvey/:id']">Do survey</a></li>
        <li *ngIf="authService.loggedIn()"><a class="nav-link" (click)="onLogoutClick()" href="#">Logout</a></li>
      </ul>
    </div>
