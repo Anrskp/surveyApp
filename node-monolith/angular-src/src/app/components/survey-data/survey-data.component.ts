@@ -27,6 +27,7 @@ export class SurveyDataComponent implements OnInit {
     });
 
     console.log(this.surveyID);
+
     /*
     this.surveyService.getSurveyData(this.surveyID).subscribe(data => {
       if (data.success) {

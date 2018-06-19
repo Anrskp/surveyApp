@@ -133,37 +133,6 @@ router.post('/sendSurveyAnswers', (req, res, next) => {
 
 })
 
-// Get survey data
-router.post('/getSurveyData', (req, res, next) => {
-  const surveyID = (req.body.surveyID);
-
-  try {
-    surveyCRUD.RPC(surveyID, 'rpc_survey_results').then(x => {
-
-      console.log(x);
-
-      let reply = JSON.parse(x)
-
-      if (reply.success) {
-        res.json({
-          success: true,
-          survey: JSON.stringify(reply.body)
-        })
-      } else {
-        res.json({
-          success: false,
-          msg: 'Something went wrong!'
-        })
-      }
-    })
-  } catch (e) {
-    console.error(e);
-    res.json({
-      success: false,
-      msg: 'Something went wrong!'
-    })
-  }
-});
 
 // Delete survey
 router.post('/deleteSurveyByID', (req, res, next) => {
@@ -187,6 +156,52 @@ router.post('/deleteSurveyByID', (req, res, next) => {
         })
       }
     })
+  } catch (e) {
+    console.error(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong!'
+    })
+  }
+});
+
+// Get survey data
+router.post('/getSurveyData', (req, res, next) => {
+  const surveyID = (req.body.surveyID);
+
+  try {
+    surveyCRUD.RPC(surveyID, 'rpc_survey_results').then(results => {
+
+      console.log(x);
+
+      let reply = JSON.parse(x)
+
+      surveyCRUD.RPC(x, 'rpc_gen_graph').then(data => {
+        var buf = Buffer.from(data, 'base64');
+
+        fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").write(buf);
+        fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").end();
+
+        res.json({
+          success: true
+        })
+
+      })
+
+      /*
+      if (reply.success) {
+        res.json({
+          success: true,
+          survey: JSON.stringify(reply.body)
+        })
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong!'
+        })
+      }
+    })
+    */
   } catch (e) {
     console.error(e);
     res.json({
