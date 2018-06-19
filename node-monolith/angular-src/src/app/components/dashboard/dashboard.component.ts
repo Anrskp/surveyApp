@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import {SurveyService} from '../../services/survey.service';
 import{Router} from '@angular/router';
 import{FlashMessagesService} from 'angular2-flash-messages';
+//import {Popup} from 'ng2-opd-popup';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +14,9 @@ import{FlashMessagesService} from 'angular2-flash-messages';
 
 export class DashboardComponent implements OnInit {
 
+//@ViewChild('popup1') popup1: Popup;
   surveyArray = [];
-//  testArray = ["Cars","Motors", "Planes"]
+  //testArray = ["Cars","Motors", "Planes"]
   constructor(private surveyService: SurveyService,private flashMessage:FlashMessagesService, private router: Router) { }
 
   ngOnInit() {
@@ -21,6 +24,8 @@ export class DashboardComponent implements OnInit {
     let userID = {userID:user.id};
 
     this.surveyService.getSurveys(JSON.stringify(userID)).subscribe(data =>{
+    // let a = JSON.stringify(data.survey);
+    // let c = JSON.parse(a);
 
           if(data.success)
           {
@@ -41,11 +46,20 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-viewSurveyResults(survey){
-  this.router.navigate(['surveyData']);
-}
-deleteSurvey(survey){
-  alert(survey+" is going to be deleted");
+viewSurveyResults(surveyID){
+
+  //  let id = document.getElementById("surveyID");
+  //  console.log(id.title);
+
+  this.router.navigate(['surveyData/'+surveyID]);
 }
 
+  deleteSurvey(surveyID){
+    console.log(surveyID);
+    //alert(survey+" is going to be deleted");
+  }
+
+  sendSurvey(surveyID){
+
+  }
   }

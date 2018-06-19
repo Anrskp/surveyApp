@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SI.Core.Models
+﻿namespace SI.Core.Models
 {
     public class Results
     {

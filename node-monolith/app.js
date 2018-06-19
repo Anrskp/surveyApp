@@ -33,6 +33,7 @@ const app = express();
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, './angular-src/dist')));
+app.use(express.static('images'));
 
 // CORS Middleware
 app.use(cors());
