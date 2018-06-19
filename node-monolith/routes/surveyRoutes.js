@@ -223,8 +223,8 @@ router.get('/generateGraph', (req, res, next) => {
     surveyCRUD.RPC('test', 'rpc_gen_graph').then(data => {
       var buf = Buffer.from(data, 'base64');
 
-      fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").write(buf);
-      fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").end();
+      fs.createWriteStream("images/" + questionID + ".png").write(buf);
+      fs.createWriteStream("images/" + questionID + ".png").end();
 
       res.json({
         success: true
