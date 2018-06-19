@@ -43,4 +43,11 @@ export class SurveyService {
     .map(res => res.json());
   }
 
+  generateGraph(){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:5000/survey/generateGraph',{headers: headers})
+    .map(res => res.json());
+  }
+
 }

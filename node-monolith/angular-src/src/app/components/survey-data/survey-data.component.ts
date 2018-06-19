@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyService } from '../../services/survey.service';
-import { DashboardComponent } from '../dashboard/dashboard.component';
-import { FlashMessagesService } from 'angular2-flash-messages/module';
 import { ActivatedRoute } from '@angular/router';
+import {SurveyService} from '../../services/survey.service';
+import{FlashMessagesService} from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-survey-data',
@@ -11,40 +10,59 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SurveyDataComponent implements OnInit {
 
-  surveyID : any;
+  constructor(private route: ActivatedRoute, private surveyService:SurveyService,private flashMessage:FlashMessagesService) { }
 
-  constructor(
-    private flashMessage:FlashMessagesService,
-    private surveyService: SurveyService,
-    private dashboard: DashboardComponent,
-    private route: ActivatedRoute
-  ) { }
+  surveyID:any;
+  survey:any;
+  questionData:any;
+  imageExist:boolean = false;
+
+
+//  quesitonText:any;
 
   ngOnInit() {
 
     this.route.params.subscribe(params => {
     this.surveyID = {surveyID:params.id};
-    });
+  });
 
-    console.log(this.surveyID);
-    /*
-    this.surveyService.getSurveyData(this.surveyID).subscribe(data => {
-      if (data.success) {
+    // this.surveyService.getSurveyData(this.surveyID).subscribe(data =>{
+    //     if(data.success)
+    //     {
+    //
+    //     //  this.survey = JSON.parse(data.survey);
+    //       //console.log(this.survey[0].Answers);
+    //       this.questionData = data.questionData;
+    //
+    //   }
+    //
+    //
+    //     else
+    //     {
+    //       this.flashMessage.show(data.msg,{
+    //       cssClass: 'alert-danger',
+    //       timeout: 5000});
+    //     }
+    //
+    //   });
 
-          send data to graph service
 
 
-        //this.survey = JSON.parse(data.survey);
-        //console.log(this.survey);
-      }
-      else {
-        this.flashMessage.show(data.msg, {
+      this.surveyService.generateGraph().subscribe(x =>{
+        if(x.success)
+        {
+          console.log(x);
+          this.questionData = x.questionData;
+          this.imageExist = true;
+        }
+        else
+        {
+          this.flashMessage.show("error",{
           cssClass: 'alert-danger',
-          timeout: 5000
-        });
-      }
-    });
-    */
-  }
+          timeout: 5000});
+        }
+      });
+    }
 
-}
+
+  }

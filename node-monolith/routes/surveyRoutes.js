@@ -226,7 +226,32 @@ router.get('/generateGraph', (req, res, next) => {
 
 // send email notification with survey link
 router.post('/sendEmailNotification', (req, res, next) => {
-  // TODO
+  try {
+    let newEmail = JSON.stringify(req.body);
+
+    surveyCRUD.RPC(newEmail, 'emailQueue').then(x => {
+
+      let reply = JSON.parse(x);
+
+      if (reply.success) {
+        res.json({
+          success: true,
+        });
+      } else {
+        res.json({
+          success: false,
+          msg: 'Something went wrong'
+        });
+      }
+
+    })
+  } catch (e) {
+    console.log(e);
+    res.json({
+      success: false,
+      msg: 'Something went wrong'
+    })
+  }
 });
 
 module.exports = router;
