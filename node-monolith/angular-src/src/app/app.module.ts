@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
+// import {PopupModule} from 'ng2-opd-popup';
 import{FlashMessagesModule} from 'angular2-flash-messages';
 import {AuthServiceService} from './services/auth-service.service';
 import {SurveyService} from './services/survey.service';
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpModule,
-    FlashMessagesModule.forRoot()
+    FlashMessagesModule.forRoot(),
+    // PopupModule.forRoot()
   ],
   providers: [AuthServiceService, SurveyService, AuthGuard],
   bootstrap: [AppComponent]

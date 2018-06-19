@@ -32,8 +32,8 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 
 // Set Static Folder
-// <insert angular static folder here>
 app.use(express.static(path.join(__dirname, './angular-src/dist')));
+app.use(express.static('images'));
 
 // CORS Middleware
 app.use(cors());
