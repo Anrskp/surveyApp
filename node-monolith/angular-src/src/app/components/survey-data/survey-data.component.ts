@@ -17,9 +17,6 @@ export class SurveyDataComponent implements OnInit {
   questionData:any;
   imageExist:boolean = false;
 
-
-//  quesitonText:any;
-
   ngOnInit() {
 
     this.route.params.subscribe(params => {
@@ -45,8 +42,6 @@ export class SurveyDataComponent implements OnInit {
     //     }
     //
     //   });
-
-
 
       this.surveyService.generateGraph().subscribe(x =>{
         if(x.success)

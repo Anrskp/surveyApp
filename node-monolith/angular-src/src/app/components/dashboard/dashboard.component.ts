@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
     this.surveyService.getSurveys(JSON.stringify(userID)).subscribe(data =>{
     // let a = JSON.stringify(data.survey);
     // let c = JSON.parse(a);
-
+      console.log(data.survey);
           if(data.success)
           {
             let b = JSON.parse(data.survey)
