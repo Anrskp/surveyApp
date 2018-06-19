@@ -55,7 +55,7 @@ amqp.connect(connString, function(err, conn) {
         labels.push(survey.Answers[i].AnswerText);
         graphData.push(survey.Answers[i].Responses);
       }
-      
+
 
       // Get image png buffer
       ChartController.generateChart(/*labels, graphData*/).then(imageBuffer => {
