@@ -45,8 +45,20 @@ amqp.connect(connString, function(err, conn) {
 
       console.log(" [x] Received request : ", msg.content.toString());
 
+      let survey = JSON.parse(msg.content);
+
+
+      let labels = [];
+      let graphData = [];
+
+      for(let i = 0; i < survey.Answers.length; i++) {
+        labels.push(survey.Answers[i].AnswerText);
+        graphData.push(survey.Answers[i].Responses);
+      }
+      
+
       // Get image png buffer
-      ChartController.generateChart().then(imageBuffer => {
+      ChartController.generateChart(/*labels, graphData*/).then(imageBuffer => {
         // Use base64
         var encodedBuffer = imageBuffer.toString('base64');
 

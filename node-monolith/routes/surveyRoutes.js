@@ -5,12 +5,7 @@ const passport = require('passport');
 const surveyCRUD = require('../rabbitMQ/surveyCRUD');
 const router = express.Router();
 const fs = require('fs');
-/*
 
- TODO : insert Passport Authenticate Middleware  < passport.authenticate('jwt', { session: false }) >
-        check and foward messages from .NET service
-
-*/
 
 // Create a survey
 router.post('/createNewSurvey', (req, res, next) => {
@@ -167,41 +162,40 @@ router.post('/deleteSurveyByID', (req, res, next) => {
 
 // Get survey data
 router.post('/getSurveyData', (req, res, next) => {
+
   const surveyID = (req.body.surveyID);
 
   try {
     surveyCRUD.RPC(surveyID, 'rpc_survey_results').then(results => {
 
-      console.log(x);
+      let surveyInfo = []
 
-      let reply = JSON.parse(x)
+      let res = JSON.parse(results);
 
-      surveyCRUD.RPC(x, 'rpc_gen_graph').then(data => {
-        var buf = Buffer.from(data, 'base64');
+      let questionAmount = res.body.length;
+      for (let i = 0; i < questionAmount; i++) {
 
-        fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").write(buf);
-        fs.createWriteStream("angular-src/src/assets/graphImages/" + questionID + ".png").end();
+        let surveyObj = {
+          "questionTxt": res.body[i].QuestionText,
+          "url": res.body[i].QID
+        };
 
-        res.json({
-          success: true
-        })
+        surveyInfo.push(surveyObj);
 
-      })
+        surveyCRUD.RPC(JSON.stringify(res.body[i]), 'rpc_gen_graph').then(data => {
+          var buf = Buffer.from(data, 'base64');
 
-      /*
-      if (reply.success) {
-        res.json({
-          success: true,
-          survey: JSON.stringify(reply.body)
-        })
-      } else {
-        res.json({
-          success: false,
-          msg: 'Something went wrong!'
+          fs.createWriteStream("images/" + 'res.body[i].QID' + ".png").write(buf);
+          fs.createWriteStream("images/" + 'res.body[i].QID' + ".png").end();
         })
       }
-    })
-    */
+        return surveyInfo;
+    }).then(x => {
+      res.json({
+        success: success,
+        body: x
+      })
+    });
   } catch (e) {
     console.error(e);
     res.json({
@@ -211,13 +205,14 @@ router.post('/getSurveyData', (req, res, next) => {
   }
 });
 
+/*
 router.get('/generateGraph', (req, res, next) => {
 
   console.log(req.body);
 
   let questionID = 'testGraph';
   let questionLabels = ['ad', 'ad', 'ad'];
-  let questionData = [12, 43 ,21];
+  let questionData = [12, 43, 21];
 
   try {
     surveyCRUD.RPC('test', 'rpc_gen_graph').then(data => {
@@ -238,6 +233,7 @@ router.get('/generateGraph', (req, res, next) => {
     });
   }
 })
+*/
 
 // send email notification with survey link
 router.post('/sendEmailNotification', (req, res, next) => {
