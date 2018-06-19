@@ -1,0 +1,11 @@
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\bin\Debug\netcoreapp2.0\MailMicroService.deps.json
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\bin\Debug\netcoreapp2.0\MailMicroService.runtimeconfig.json
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\bin\Debug\netcoreapp2.0\MailMicroService.runtimeconfig.dev.json
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\bin\Debug\netcoreapp2.0\MailMicroService.dll
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.csprojResolveAssemblyReference.cache
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.csproj.CoreCompileInputs.cache
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.AssemblyInfoInputs.cache
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.AssemblyInfo.cs
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\bin\Debug\netcoreapp2.0\MailMicroService.pdb
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.dll
+C:\Users\ogyun\source\repos\MailMicroService\MailMicroService\obj\Debug\netcoreapp2.0\MailMicroService.pdb
