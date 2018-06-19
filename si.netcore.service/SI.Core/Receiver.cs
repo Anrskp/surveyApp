@@ -18,12 +18,21 @@ namespace SystemIntegration_2018
             VirtualHost = "okigdyac"
         };
 
+        //queue for storing messages locally to free up the cloud queue and then perform operations on them (status: unused)
         Queue<string> localQueue = new Queue<string>();
+
         RPCTasks rpctask = new RPCTasks();
+
+        //booleans used to close connections
+        #region Connection closers
         bool keepOpen = true;
         bool keepOpenSaveSurvey = true;
         bool keepOpenGetSurvey = true;
         bool keepOpenGetSurveysUnpopulated = true;
+        bool keepOpenSaveAnswer = true;
+        bool keepOpenGetSurveyResults = true;
+        bool keepOpenDeleteSurvey = true;
+        #endregion Connection closers
 
         private async Task SaveSurveyRPC()
         {
@@ -61,8 +70,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -82,10 +90,9 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenSaveSurvey)
+                    while (keepOpenSaveSurvey && keepOpen)
                     {
                         await Task.Delay(100);
                     }
@@ -130,8 +137,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -151,10 +157,9 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenGetSurveysUnpopulated)
+                    while (keepOpenGetSurveysUnpopulated && keepOpen)
                     {
                         await Task.Delay(100);
                     }
@@ -199,8 +204,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -220,16 +224,15 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenGetSurvey)
+                    while (keepOpenGetSurvey && keepOpen)
                     {
                         await Task.Delay(100);
                     }
                 }
             }
-            Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
+            Console.WriteLine($"[x] Stopping to listen on {queueName} queue");
         }
 
         private async Task SaveAnswersRPC()
@@ -268,8 +271,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -289,16 +291,15 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenGetSurvey)
+                    while (keepOpenSaveAnswer && keepOpen)
                     {
                         await Task.Delay(100);
                     }
                 }
             }
-            Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
+            Console.WriteLine($"[x] Stopping to listen on {queueName} queue");
         }
 
         private async Task GetSurveyResultsRPC()
@@ -337,8 +338,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -358,16 +358,15 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenGetSurvey)
+                    while (keepOpenGetSurveyResults && keepOpen)
                     {
                         await Task.Delay(100);
                     }
                 }
             }
-            Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
+            Console.WriteLine($"[x] Stopping to listen on {queueName} queue");
         }
 
         private async Task DeleteSurveyRPC()
@@ -406,8 +405,7 @@ namespace SystemIntegration_2018
                             catch (Exception e)
                             {
                                 Console.WriteLine(" [.] " + e.Message);
-                                response = "";
-                                Console.ReadLine();
+                                response = "{\"success\": false, \"body\":" + e.ToString() + "}";
                             }
                             finally
                             {
@@ -427,26 +425,72 @@ namespace SystemIntegration_2018
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
-                        Console.ReadLine();
                     }
 
-                    while (keepOpenGetSurvey)
+                    while (keepOpenDeleteSurvey && keepOpen)
                     {
                         await Task.Delay(100);
                     }
                 }
             }
-            Console.WriteLine($" [x] Stopping to listen on {queueName} queue");
+            Console.WriteLine($"[x] Stopping to listen on {queueName} queue");
         }
 
+        private async Task CloseConnectionsListener()
+        {
+            string queueName = "rpc_stop_listening";
+            Console.WriteLine($"[x] Starting to listen on {queueName} queue!");
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    try
+                    {
+                        channel.QueueDeclare(queue: queueName, durable: false,
+                          exclusive: false, autoDelete: false, arguments: null);
+                        var consumer = new EventingBasicConsumer(channel);
+                        Console.WriteLine("[x] Awaiting queue stopping requests");
+
+                        consumer.Received += async (model, ea) =>
+                        {
+                            var body = ea.Body;
+                            try
+                            {
+                                var message = Encoding.UTF8.GetString(body);
+                                Console.WriteLine($"[x] Stop request has been made for: {message}");
+                                CloseConnections(message);
+                                Console.WriteLine($"[x] Time: {DateTime.UtcNow.TimeOfDay}");
+                                Console.WriteLine();
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(" [.] " + e.ToString());
+                            }
+                        };
+                        channel.BasicConsume(queue: queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                    while (keepOpen)
+                    {
+                        await Task.Delay(100);
+                    }
+                }
+            }
+            Console.WriteLine($"[x] Stopping to listen on {queueName} queue");
+        }
+
+        //Functions that were used to store/see/retrieve messages from the cloud queue locally
+        //before performing operations on them, so the cloud queue would be freed
+        #region Non-RPC helper functions
         public int GetMessageCount()
         {
             return localQueue.Count;
-        }
-
-        public void CloseConnection()
-        {
-            keepOpen = false;
         }
 
         public string GetFirstReceivedMessage()
@@ -457,15 +501,62 @@ namespace SystemIntegration_2018
             }
             return "";
         }
+        #endregion Non-RPC helper functions
+
+        public void CloseConnections(string queueName)
+        {
+            try
+            {
+                switch (queueName)
+                {
+                    case "rpc_save_survey":
+                        keepOpenSaveSurvey = false;
+                        break;
+                    case "rpc_return_surveys_unpop":
+                        keepOpenGetSurveysUnpopulated = false;
+                        break;
+                    case "rpc_single_survey":
+                        keepOpenGetSurvey = false;
+                        break;
+                    case "rpc_save_answers":
+                        keepOpenSaveAnswer = false;
+                        break;
+                    case "rpc_survey_results":
+                        keepOpenGetSurveyResults = false;
+                        break;
+                    case "rpc_delete_survey":
+                        keepOpenDeleteSurvey = false;
+                        break;
+                    case "close_all":
+                        keepOpen = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public async Task StartRPCListener()
         {
+            keepOpen = true;
+            keepOpenSaveSurvey = true;
+            keepOpenGetSurvey = true;
+            keepOpenGetSurveysUnpopulated = true;
+            keepOpenSaveAnswer = true;
+            keepOpenGetSurveyResults = true;
+            keepOpenDeleteSurvey = true;
+
             GetSurveysUnpopulatedRPC();
             GetPopulatedSurveyRPC();
             SaveSurveyRPC();
             SaveAnswersRPC();
             GetSurveyResultsRPC();
             DeleteSurveyRPC();
+            CloseConnectionsListener();
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SI.Core.Models
+﻿namespace SI.Core.Models
 {
     /// <summary>
-    /// Helper class that's used to represent the 
+    /// Helper class that's used to represent the the answer data for a questionS
     /// </summary>
     public class QuestionResponse
     {
