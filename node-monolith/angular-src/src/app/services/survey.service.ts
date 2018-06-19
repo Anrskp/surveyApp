@@ -50,4 +50,18 @@ export class SurveyService {
     .map(res => res.json());
   }
 
+  sendEmail(mail){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:5000/survey/sendEmailNotification', mail,{headers: headers})
+    .map(res => res.json());
+  }
+
+  deleteSurvey(surveyID){
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:5000/survey/deleteSurveyByID', surveyID,{headers: headers})
+    .map(res => res.json());
+  }
+
 }
