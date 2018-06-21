@@ -13,51 +13,31 @@ export class SurveyDataComponent implements OnInit {
   constructor(private route: ActivatedRoute, private surveyService:SurveyService,private flashMessage:FlashMessagesService) { }
 
   surveyID:any;
-  survey:any;
+  surveyArray:any;
   questionData:any;
   imageExist:boolean = false;
 
   ngOnInit() {
-
+    this.imageExist = false;
     this.route.params.subscribe(params => {
     this.surveyID = {surveyID:params.id};
   });
 
-    // this.surveyService.getSurveyData(this.surveyID).subscribe(data =>{
-    //     if(data.success)
-    //     {
-    //
-    //     //  this.survey = JSON.parse(data.survey);
-    //       //console.log(this.survey[0].Answers);
-    //       this.questionData = data.questionData;
-    //
-    //   }
-    //
-    //
-    //     else
-    //     {
-    //       this.flashMessage.show(data.msg,{
-    //       cssClass: 'alert-danger',
-    //       timeout: 5000});
-    //     }
-    //
-    //   });
-
-      this.surveyService.generateGraph().subscribe(x =>{
-        if(x.success)
+    this.surveyService.getSurveyData(this.surveyID).subscribe(data =>{
+        if(data.success)
         {
-          console.log(x);
-          this.questionData = x.questionData;
+          this.surveyArray = data.body;
+          console.log(this.surveyArray)
           this.imageExist = true;
-        }
+      }
         else
         {
-          this.flashMessage.show("error",{
+          this.flashMessage.show(data.msg,{
           cssClass: 'alert-danger',
           timeout: 5000});
         }
-      });
-    }
 
+      });
 
   }
+}

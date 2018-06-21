@@ -15,6 +15,7 @@ export class CreateSurveyComponent implements OnInit {
   Answer1:string;
   Answer2:string;
   Answer3:string;
+  Answer4:string;
   Surveys = [];
 
   hideDescription = false;
@@ -71,7 +72,7 @@ export class CreateSurveyComponent implements OnInit {
 
       let question = {
       "Question":this.Question,
-      "Answers":[ this.Answer1, this.Answer2, this.Answer3]};
+      "Answers":[ this.Answer1, this.Answer2, this.Answer3,this.Answer4]};
       this.survey.Questions.push(question);
       this.flashMessage.show('Question successfully added',{
       cssClass: 'alert-success',

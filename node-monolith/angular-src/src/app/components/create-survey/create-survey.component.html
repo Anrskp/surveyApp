@@ -38,6 +38,10 @@
         <label for="Answer3">Third answer</label>
         <input type="text" class="form-control" id="Answer3" [(ngModel)] = "Answer3" name="Answer3" placeholder="Please enter your answer">
       </div>
+      <div class="form-group">
+        <label for="Answer4">Fourth answer</label>
+        <input type="text" class="form-control" id="Answer4" [(ngModel)] = "Answer4" name="Answer4" placeholder="Please enter your answer">
+      </div>
       <button type="button" class="btn btn-success" (click)="newQuestion(); questionForm.reset()" id="addNewButton" >Add new question</button>
       <button type="button" class="btn btn-success"  (click)="sendSurvey();">Send survey(s)</button>
       <button type="button" class="btn btn-success" (click)="newSurvey();questionForm.reset(); surveyDescriptionForm.reset()">Create new survey</button>

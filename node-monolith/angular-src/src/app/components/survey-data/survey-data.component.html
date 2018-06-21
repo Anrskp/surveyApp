@@ -1,6 +1,6 @@
 <div *ngIf="imageExist">
-<img src="http://localhost:5000/testGraph.png" alt="Description" />
+<div  *ngFor="let survey of surveyArray">
+<h3>{{survey.questionTxt}} </h3>
+<img src="http://localhost:5000/{{survey.url}}.png" alt="Description" />
 </div>
-
-<!-- <div *ngFor="let survey of surveyArray">
-</div> -->
+</div>

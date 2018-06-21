@@ -185,14 +185,14 @@ router.post('/getSurveyData', (req, res, next) => {
         surveyCRUD.RPC(JSON.stringify(res.body[i]), 'rpc_gen_graph').then(data => {
           var buf = Buffer.from(data, 'base64');
 
-          fs.createWriteStream("images/" + 'res.body[i].QID' + ".png").write(buf);
-          fs.createWriteStream("images/" + 'res.body[i].QID' + ".png").end();
+          fs.createWriteStream("images/" + res.body[i].QID + ".png").write(buf);
+          fs.createWriteStream("images/" + res.body[i].QID + ".png").end();
         })
       }
         return surveyInfo;
     }).then(x => {
       res.json({
-        success: success,
+        success: true,
         body: x
       })
     });
