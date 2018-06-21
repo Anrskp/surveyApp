@@ -27,15 +27,15 @@ namespace SI.Core.Models
         {
             switch (choice)
             {
-                case "a": Option_one = 1;
+                case "0": Option_one = 1;
                     break;
-                case "b":
+                case "1":
                     Option_two = 1;
                     break;
-                case "c":
+                case "2":
                     Option_three = 1;
                     break;
-                case "d":
+                case "3":
                     Option_four = 1;
                     break;
                 default:
